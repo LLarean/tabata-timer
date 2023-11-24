@@ -6,16 +6,18 @@ using UnityEngine.UI;
 
 public class TimerView : MonoBehaviour
 {
-    [SerializeField] private TMP_Text _time;
-    [SerializeField] private TMP_Text _round;
+    [SerializeField] private TMP_Text _roundCounter;
+    [SerializeField] private TMP_Text _seconds;
+    [SerializeField] private Image _progressBar;
     [Space]
     [SerializeField] private Button _startStop;
-    [SerializeField] private TMP_Text _label;
+    [SerializeField] private TMP_Text _startStopLabel;
     [SerializeField] private Button _reset;
     
     private Coroutine _coroutine = null;
     private bool _isRunning = false;
     private float _updateFrequency = 1f;
+    private int _circleCount;
 
     public event Action OnStartStopClicked;
     public event Action OnResetClicked;
@@ -28,14 +30,19 @@ public class TimerView : MonoBehaviour
     
     public void SetRound(int currentRounds, int numberRounds)
     {
-        _round.text = $"{currentRounds}/{numberRounds}";
+        _roundCounter.text = $"{currentRounds}/{numberRounds}";
+    }
+    
+    public void SetCircle(int value)
+    {
+        _circleCount = value;
     }
     
     public void StartTimer()
     {
         _isRunning = true;
         _coroutine = StartCoroutine(Timer());
-        _label.text = GlobalStrings.Stop;
+        _startStopLabel.text = GlobalStrings.Stop;
     }
 
     public void StopTimer()
@@ -47,32 +54,30 @@ public class TimerView : MonoBehaviour
             StopCoroutine(_coroutine);
         }
         
-        _label.text = GlobalStrings.Start;
+        _startStopLabel.text = GlobalStrings.Start;
     }
     
     public void ResetTimer()
     {
         StopTimer();
-        _label.text = GlobalStrings.Start;
+        _startStopLabel.text = GlobalStrings.Start;
         DisplayTime(0);
+        _progressBar.fillAmount = 0;
     }
 
     public void DisplayTime(float timeToDisplay)
     {
-        float minutes = Mathf.FloorToInt(timeToDisplay / 60);
-        float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+        _seconds.text = $"{timeToDisplay:00}";
 
-        _time.text = $"{minutes:00}:{seconds:00}";
+        var temp = 1f / _circleCount * timeToDisplay;
+        _progressBar.fillAmount = temp;
     }
 
     private void Start()
     {
         _startStop.onClick.AddListener(ClickStartStop);
         _reset.onClick.AddListener(ClickReset);
-
-        _label.text = GlobalStrings.Start;
-        _round.text = String.Empty;
-        DisplayTime(0);
+        ResetDisplayedData();
     }
 
     private void OnDestroy()
@@ -84,6 +89,14 @@ public class TimerView : MonoBehaviour
     private void ClickStartStop() => OnStartStopClicked?.Invoke();
     
     private void ClickReset() => OnResetClicked?.Invoke();
+
+    private void ResetDisplayedData()
+    {
+        _startStopLabel.text = GlobalStrings.Start;
+        _roundCounter.text = String.Empty;
+        _progressBar.fillAmount = 1;
+        DisplayTime(0);
+    }
 
     private IEnumerator Timer()
     {

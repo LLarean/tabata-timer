@@ -3,6 +3,7 @@ using UnityEngine;
 public class Bootstrap : MonoBehaviour
 {
     [SerializeField] private TimerView _timerView;
+    [SerializeField] private AudioPlayer _audioPlayer;
     
     private TimerPresenter _timerPresenter;
 
@@ -12,6 +13,7 @@ public class Bootstrap : MonoBehaviour
         
         _timerPresenter = new TimerPresenter(timerModel, _timerView);
         _timerPresenter.SetData();
+        _timerPresenter.SetAudioPlayer(_audioPlayer);
         _timerPresenter.Subsribe();
     }
 

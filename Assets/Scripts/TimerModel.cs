@@ -3,7 +3,6 @@ public class TimerModel
     public int NumberRounds;
     public int CurrentRound;
 
-    public int WaitingTime;
     public int SportsTime;
     public int TimeBreaks;
     public int CurrentTime;
@@ -12,19 +11,20 @@ public class TimerModel
 
     public bool IsRunning;
     public bool IsSport;
+    public bool IsStart;
 
-    public TimerModel(int waitingTime = 10, int numberRounds = 8, int sportsTime = 20, int timeBreaks = 10,
-        int currentTime = 0, float updateFrequency = 1f)
+    public TimerModel(int numberRounds = 2, int sportsTime = 10, int timeBreaks = 5, float updateFrequency = 1f)
     {
-        WaitingTime = waitingTime;
         NumberRounds = numberRounds;
 
         SportsTime = sportsTime;
         TimeBreaks = timeBreaks;
-        CurrentTime = currentTime;
+        CurrentTime = timeBreaks;
 
         UpdateFrequency = updateFrequency;
+        
         IsRunning = false;
         IsSport = false;
+        IsStart = true;
     }
 }
