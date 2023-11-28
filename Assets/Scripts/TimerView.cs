@@ -8,7 +8,6 @@ public class TimerView : MonoBehaviour
 {
     [SerializeField] private TMP_Text _roundCounter;
     [SerializeField] private TMP_Text _seconds;
-    [SerializeField] private Image _progressBar;
     [Space]
     [SerializeField] private Button _startStop;
     [SerializeField] private TMP_Text _startStopLabel;
@@ -17,7 +16,6 @@ public class TimerView : MonoBehaviour
     private Coroutine _coroutine = null;
     private bool _isRunning = false;
     private float _updateFrequency = 1f;
-    private int _circleCount;
 
     public event Action OnStartStopClicked;
     public event Action OnResetClicked;
@@ -32,19 +30,14 @@ public class TimerView : MonoBehaviour
     {
         _roundCounter.text = $"{currentRounds}/{numberRounds}";
     }
-    
-    public void SetCircle(int value)
-    {
-        _circleCount = value;
-    }
-    
+
     public void StartTimer()
     {
         _isRunning = true;
         _coroutine = StartCoroutine(Timer());
         _startStopLabel.text = GlobalStrings.Stop;
     }
-
+    
     public void StopTimer()
     {
         _isRunning = false;
@@ -61,16 +54,12 @@ public class TimerView : MonoBehaviour
     {
         StopTimer();
         _startStopLabel.text = GlobalStrings.Start;
-        DisplayTime(0);
-        _progressBar.fillAmount = 0;
+        _seconds.text = "00";
     }
 
     public void DisplayTime(float timeToDisplay)
     {
         _seconds.text = $"{timeToDisplay:00}";
-
-        var temp = 1f / _circleCount * timeToDisplay;
-        _progressBar.fillAmount = temp;
     }
 
     private void Start()
@@ -94,8 +83,7 @@ public class TimerView : MonoBehaviour
     {
         _startStopLabel.text = GlobalStrings.Start;
         _roundCounter.text = String.Empty;
-        _progressBar.fillAmount = 1;
-        DisplayTime(0);
+        _seconds.text = "00";
     }
 
     private IEnumerator Timer()

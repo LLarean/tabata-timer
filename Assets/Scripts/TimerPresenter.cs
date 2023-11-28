@@ -4,6 +4,7 @@ public class TimerPresenter
     private readonly TimerView _timerView;
     
     private AudioPlayer _audioPlayer;
+    private ProgressBarPresenter _progressBarPresenter;
 
     public TimerPresenter(TimerModel timeModel, TimerView timerView)
     {
@@ -19,6 +20,11 @@ public class TimerPresenter
 
     public void SetAudioPlayer(AudioPlayer audioPlayer) => _audioPlayer = audioPlayer;
 
+    public void SetProgressBar(ProgressBarPresenter progressBarPresenter)
+    {
+        _progressBarPresenter = progressBarPresenter;
+    }
+    
     public void Subsribe()
     {
         _timerView.OnStartStopClicked += StartStopClicked;
@@ -40,10 +46,12 @@ public class TimerPresenter
         if (_timeModel.IsRunning == true)
         {
             _timerView.StopTimer();
+            _progressBarPresenter.PauseAnimation();
         }
         else
         {
             _timerView.StartTimer();
+            _progressBarPresenter.StartAnimation(_timeModel.CurrentTime);
         }
 
         _timeModel.IsRunning = !_timeModel.IsRunning;
@@ -51,8 +59,12 @@ public class TimerPresenter
 
     private void ResetClicked()
     {
+        _audioPlayer.PlayTap();
+
         _timerView.StopTimer();
         _timerView.ResetTimer();
+        
+        _progressBarPresenter.ResetAnimation();
         
         ResetTimer();
     }
@@ -76,7 +88,8 @@ public class TimerPresenter
             _timeModel.CurrentRound++;
             
             _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
-            _timerView.SetCircle(_timeModel.SportsTime);
+            // _timerView.SetCircle(_timeModel.SportsTime);
+            _progressBarPresenter.ChangeMaximumDuration(_timeModel.SportsTime);
             
             _audioPlayer.PlaySport();
         }
@@ -84,8 +97,9 @@ public class TimerPresenter
         {
             _timeModel.IsSport = false;
             _timeModel.CurrentTime = _timeModel.TimeBreaks;
-            
-            _timerView.SetCircle(_timeModel.TimeBreaks);
+
+            _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
+            // _timerView.SetCircle(_timeModel.TimeBreaks);
             
             _audioPlayer.PlayTimeBreak();
         }
@@ -95,13 +109,12 @@ public class TimerPresenter
 
     private void ResetTimer()
     {
+        _timeModel.IsRunning = false;
         _timeModel.IsSport = false;
         _timeModel.IsStart = true;
         
         _timeModel.CurrentRound = 0;
         _timeModel.CurrentTime = _timeModel.TimeBreaks;
-        
-        _timeModel.IsRunning = !_timeModel.IsRunning;
         
         _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
         _timerView.ResetTimer();
@@ -109,10 +122,13 @@ public class TimerPresenter
 
     private void PlaySound()
     {
+        _audioPlayer.PlayTap();
+            
         if (_timeModel.IsStart == true)
         {
             _timeModel.IsStart = false;
-            _timerView.SetCircle(_timeModel.TimeBreaks);
+            // _timerView.SetCircle(_timeModel.TimeBreaks);
+            _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
             _audioPlayer.PlayStartFinish();
         }
     }

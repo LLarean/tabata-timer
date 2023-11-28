@@ -13,7 +13,7 @@ public class TimerModel
     public bool IsSport;
     public bool IsStart;
 
-    public TimerModel(int numberRounds = 2, int sportsTime = 10, int timeBreaks = 5, float updateFrequency = 1f)
+    public TimerModel(int numberRounds = 8, int sportsTime = 20, int timeBreaks = 10, float updateFrequency = 1f)
     {
         NumberRounds = numberRounds;
 
