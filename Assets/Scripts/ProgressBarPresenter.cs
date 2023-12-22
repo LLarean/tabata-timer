@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class ProgressBarPresenter
 {
     private readonly ProgressBarModel _progressBarModel;
@@ -15,7 +17,11 @@ public class ProgressBarPresenter
         _progressBarView.ResumeAnimation(_progressBarModel.CurrentDuration);
     }
 
-    public void PauseAnimation() => _progressBarView.PauseAnimation();
+    public void PauseAnimation()
+    {
+        SetPauseColor();
+        _progressBarView.PauseAnimation();
+    }
 
     public void ChangeMaximumDuration(float duration)
     {
@@ -24,4 +30,30 @@ public class ProgressBarPresenter
     }
 
     public void ResetAnimation() => _progressBarView.ResetAnimation();
+
+    public void SetColor(TimerStatus timerStatus)
+    {
+        Color color = Color.cyan;
+        
+        switch (timerStatus)
+        {
+            case TimerStatus.Preparation:
+                color = GlobalColors.Rest;
+                break;
+            case TimerStatus.Workout:
+                color = GlobalColors.Workout;
+                break;
+            case TimerStatus.Rest:
+                color = GlobalColors.Rest;
+                break;
+        }
+
+        _progressBarView.SetColor(color);
+    }
+
+    public void SetPauseColor()
+    {
+        Color color = GlobalColors.Pause;
+        _progressBarView.SetColor(color);
+    }
 }

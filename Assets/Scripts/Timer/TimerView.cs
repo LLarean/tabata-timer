@@ -4,32 +4,29 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TimerView : MonoBehaviour
+public class TimerView : View
 {
-    [SerializeField] private TMP_Text _roundCounter;
+    [SerializeField] private Button _settings;
     [SerializeField] private TMP_Text _seconds;
+    [SerializeField] private TMP_Text _roundCounter;
+    [SerializeField] private TMP_Text _status;
     [Space]
     [SerializeField] private Button _startStop;
     [SerializeField] private TMP_Text _startStopLabel;
     [SerializeField] private Button _reset;
-    
+
     private Coroutine _coroutine = null;
     private bool _isRunning = false;
     private float _updateFrequency = 1f;
 
+    public event Action OnSettingsClicked;
     public event Action OnStartStopClicked;
     public event Action OnResetClicked;
     public event Action OnTimerChanged;
 
-    public void SetUpdateFrequency(float updateFrequency)
-    {
-        _updateFrequency = updateFrequency;
-    }
-    
-    public void SetRound(int currentRounds, int numberRounds)
-    {
-        _roundCounter.text = $"{currentRounds}/{numberRounds}";
-    }
+    public void SetUpdateFrequency(float updateFrequency) => _updateFrequency = updateFrequency;
+
+    public void SetRound(int currentRounds, int numberRounds) => _roundCounter.text = $"{currentRounds}/{numberRounds}";
 
     public void StartTimer()
     {
@@ -37,19 +34,19 @@ public class TimerView : MonoBehaviour
         _coroutine = StartCoroutine(Timer());
         _startStopLabel.text = GlobalStrings.Stop;
     }
-    
+
     public void StopTimer()
     {
         _isRunning = false;
-        
+
         if (_coroutine != null)
         {
             StopCoroutine(_coroutine);
         }
-        
+
         _startStopLabel.text = GlobalStrings.Start;
     }
-    
+
     public void ResetTimer()
     {
         StopTimer();
@@ -57,13 +54,27 @@ public class TimerView : MonoBehaviour
         _seconds.text = "00";
     }
 
-    public void DisplayTime(float timeToDisplay)
+    public void DisplayTime(float timeToDisplay) => _seconds.text = $"{timeToDisplay:00}";
+    
+    public void SetStatus(TimerStatus timerStatus)
     {
-        _seconds.text = $"{timeToDisplay:00}";
+        switch (timerStatus)
+        {
+            case TimerStatus.Preparation:
+                _status.text = GlobalStrings.Preparation;
+                break;
+            case TimerStatus.Workout:
+                _status.text = GlobalStrings.Workout;
+                break;
+            case TimerStatus.Rest:
+                _status.text = GlobalStrings.Rest;
+                break;
+        }
     }
-
+    
     private void Start()
     {
+        _settings.onClick.AddListener(ClickSettings);
         _startStop.onClick.AddListener(ClickStartStop);
         _reset.onClick.AddListener(ClickReset);
         ResetDisplayedData();
@@ -71,12 +82,15 @@ public class TimerView : MonoBehaviour
 
     private void OnDestroy()
     {
+        _settings.onClick.RemoveAllListeners();
         _startStop.onClick.RemoveAllListeners();
         _reset.onClick.RemoveAllListeners();
     }
-    
+
+    private void ClickSettings() => OnSettingsClicked?.Invoke();
+
     private void ClickStartStop() => OnStartStopClicked?.Invoke();
-    
+
     private void ClickReset() => OnResetClicked?.Invoke();
 
     private void ResetDisplayedData()

@@ -16,7 +16,7 @@ public class ProgressBarView : MonoBehaviour
         KillTweeners();
         
         _fill.fillAmount = 1;
-        _colorTweener = _fill.DOColor(GlobalColors.Active, _colorDuration);
+        _colorTweener = _fill.DOColor(GlobalColors.Workout, _colorDuration);
         _fillTweener = _fill.DOFillAmount(0, duration).SetEase(Ease.Linear);
     }
     
@@ -24,14 +24,14 @@ public class ProgressBarView : MonoBehaviour
     {
         KillTweeners();
 
-        _colorTweener = _fill.DOColor(GlobalColors.Inactive, _colorDuration);
+        // _colorTweener = _fill.DOColor(GlobalColors.Pause, _colorDuration);
     }
 
     public void ResumeAnimation(float duration)
     {
         KillTweeners();
         
-        _colorTweener = _fill.DOColor(GlobalColors.Active, _colorDuration);
+        // _colorTweener = _fill.DOColor(GlobalColors.Workout, _colorDuration);
         _fillTweener = _fill.DOFillAmount(0, duration).SetEase(Ease.Linear);
     }
     
@@ -40,19 +40,22 @@ public class ProgressBarView : MonoBehaviour
         KillTweeners();
         
         _fill.fillAmount = 1;
-        _colorTweener = _fill.DOColor(GlobalColors.Inactive, _colorDuration);
+        // _colorTweener = _fill.DOColor(GlobalColors.Pause, _colorDuration);
+    }
+    
+    public void SetColor(Color color)
+    {
+        KillTweeners();
+        _colorTweener = _fill.DOColor(color, _colorDuration);
     }
     
     private void Start()
     {
         _fill.fillAmount = 1;
-        _fill.color = GlobalColors.Inactive;
+        _fill.color = GlobalColors.Pause;
     }
 
-    private void OnDestroy()
-    {
-        KillTweeners();
-    }
+    private void OnDestroy() => KillTweeners();
 
     private void KillTweeners()
     {
