@@ -59,6 +59,7 @@ public class Bootstrap : MonoBehaviour
         SettingsModel settingsModel = new SettingsModel();
         _settingsPresenter = new SettingsPresenter(settingsModel, _settingsView);
         _settingsPresenter.Subscribe();
+        _settingsPresenter.DisplayValue();
     }
 
     private TimerModel GetTimerModel()
@@ -93,5 +94,6 @@ public class Bootstrap : MonoBehaviour
         _timerPresenter.SetViewChanger(_viewChanger);
         
         _settingsPresenter.SetViewChanger(_viewChanger);
+        _settingsPresenter.SetAudioPlayer(_audioPlayer);
     }
 }

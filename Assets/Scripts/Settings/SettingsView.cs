@@ -10,38 +10,44 @@ public class SettingsView : View
     [SerializeField] private SettingsItem _sport;
     [SerializeField] private SettingsItem _tieBreak;
     
-    private AudioPlayer _audioPlayer;
-
     public event Action OnBackClicked;
+    public event Action<SettingsType, int> OnSettingsChanged;
+    
+    public void DisplayValue(SettingsType settingsType, int value)
+    {
+        switch (settingsType)
+        {
+            case SettingsType.Rounds:
+                _rounds.DisplayValue(value);
+                break;
+            case SettingsType.Sport:
+                _sport.DisplayValue(value);
+                break;
+            case SettingsType.TieBreak:
+                _tieBreak.DisplayValue(value);
+                break;
+        }
+    }
     
     private void Start()
     {
         _back.onClick.AddListener(BackClicked);
 
-        _rounds.OnValueChanged += RoundsChanged;
-        _sport.OnValueChanged += SportChanged;
-        _tieBreak.OnValueChanged += TieBreakChanged;
+        _rounds.OnValueChanged += ValueChanged;
+        _sport.OnValueChanged += ValueChanged;
+        _tieBreak.OnValueChanged += ValueChanged;
     }
 
     private void OnDestroy()
     {
         _back.onClick.RemoveAllListeners();
+        
+        _rounds.OnValueChanged -= ValueChanged;
+        _sport.OnValueChanged -= ValueChanged;
+        _tieBreak.OnValueChanged -= ValueChanged;
     }
 
     private void BackClicked() => OnBackClicked?.Invoke();
 
-    private void RoundsChanged(SettingsType settingsType, int i)
-    {
-        // _audioPlayer.PlayTap();
-    }
-
-    private void SportChanged(SettingsType settingsType, int i)
-    {
-        // _audioPlayer.PlayTap();
-    }
-
-    private void TieBreakChanged(SettingsType settingsType, int i)
-    {
-        // _audioPlayer.PlayTap();
-    }
+    private void ValueChanged(SettingsType settingsType, int value) => OnSettingsChanged?.Invoke(settingsType, value);
 }

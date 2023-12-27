@@ -21,8 +21,7 @@ public class TimerPresenter
         _timerView.SetUpdateFrequency(_timeModel.UpdateFrequency);
     }
 
-    public void SetProgressBar(ProgressBarPresenter progressBarPresenter) =>
-        _progressBarPresenter = progressBarPresenter;
+    public void SetProgressBar(ProgressBarPresenter progressBarPresenter) => _progressBarPresenter = progressBarPresenter;
 
     public void SetAudioPlayer(AudioPlayer audioPlayer) => _audioPlayer = audioPlayer;
 

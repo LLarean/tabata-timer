@@ -1648,7 +1648,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &989979315
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1859,7 +1859,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _settings: {fileID: 806270769}
-  progressBarView: {fileID: 1094689139}
   _seconds: {fileID: 96342537}
   _roundCounter: {fileID: 1712126625}
   _status: {fileID: 2123727635}
