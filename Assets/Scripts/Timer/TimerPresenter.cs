@@ -8,6 +8,7 @@ public class TimerPresenter
     private AudioPlayer _audioPlayer;
     private ProgressBarPresenter _progressBarPresenter;
     private ViewChanger _viewChanger;
+    private string _timerStatus = GlobalStrings.Preparation;
 
     public TimerPresenter(TimerModel timeModel, TimerView timerView)
     {
@@ -54,7 +55,6 @@ public class TimerPresenter
         _timerView.StopTimer();
         _progressBarPresenter.PauseAnimation();
         _timeModel.IsRunning = false;
-        _timeModel.TimerStatus = TimerStatus.Preparation;
 
         _viewChanger.ShowSettings();
     }
@@ -66,12 +66,14 @@ public class TimerPresenter
         if (_timeModel.IsRunning == true)
         {
             _timerView.StopTimer();
+            _timerView.SetStatus(GlobalStrings.Pause);
             _progressBarPresenter.PauseAnimation();
         }
         else
         {
             _timerView.StartTimer();
-            _progressBarPresenter.SetColor(_timeModel.TimerStatus);
+            _timerView.SetStatus(_timerStatus);
+            _progressBarPresenter.SetColor(_timeModel.IsSport);
             _progressBarPresenter.StartAnimation(_timeModel.CurrentTime);
         }
 
@@ -84,9 +86,11 @@ public class TimerPresenter
 
         _timerView.StopTimer();
         _timerView.ResetTimer();
+        _timerStatus = GlobalStrings.Preparation;
+        _timerView.SetStatus(_timerStatus);
+        _progressBarPresenter.PauseAnimation();
 
         _progressBarPresenter.ResetAnimation();
-        _timeModel.TimerStatus = TimerStatus.Preparation;
 
         ResetTimer();
     }
@@ -94,90 +98,55 @@ public class TimerPresenter
     private void TimerChanged()
     {
         _timeModel.CurrentTime -= 1;
-        
-        // if (_timeModel.CurrentTime == 0 && _timeModel.TimerStatus != TimerStatus.Workout &&
-        //     _timeModel.CurrentRound == _timeModel.NumberRounds)
-        // {
-        //     _timeModel.TimerStatus = TimerStatus.Preparation;
-        //
-        //     _timerView.StopTimer();
-        //     _timerView.ResetTimer();
-        //     ResetTimer();
-        //     _progressBarPresenter.SetPauseColor();
-        //
-        //     _audioPlayer.PlayStartFinish();
-        // }
-        // else if (_timeModel.CurrentTime == 0 && _timeModel.TimerStatus != TimerStatus.Workout)
-        // {
-        //     _timeModel.IsSport = true;
-        //     _timeModel.TimerStatus = TimerStatus.Workout;
-        //
-        //     _timeModel.CurrentTime = _timeModel.SportsTime;
-        //     _timeModel.CurrentRound++;
-        //
-        //     _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
-        //     _progressBarPresenter.SetColor(_timeModel.TimerStatus);
-        //     _progressBarPresenter.ChangeMaximumDuration(_timeModel.SportsTime);
-        //
-        //     _audioPlayer.PlaySport();
-        // }
-        // else if (_timeModel.CurrentTime == 0 && _timeModel.TimerStatus == TimerStatus.Workout)
-        // {
-        //     _timeModel.IsSport = false;
-        //     _timeModel.TimerStatus = TimerStatus.Rest;
-        //
-        //     _timeModel.CurrentTime = _timeModel.TimeBreaks;
-        //
-        //     _progressBarPresenter.SetColor(_timeModel.TimerStatus);
-        //     _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
-        //     _audioPlayer.PlayTimeBreak();
-        // }
 
         if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == false &&
             _timeModel.CurrentRound == _timeModel.NumberRounds)
         {
-            _timeModel.TimerStatus = TimerStatus.Preparation;
-        
             _timerView.StopTimer();
             _timerView.ResetTimer();
+            
+            _timerStatus = GlobalStrings.Preparation;
+            _timerView.SetStatus(_timerStatus);
             ResetTimer();
-        
+
+            _progressBarPresenter.PauseAnimation();
             _audioPlayer.PlayStartFinish();
         }
         else if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == false)
         {
             _timeModel.IsSport = true;
-            _timeModel.TimerStatus = TimerStatus.Workout;
-        
             _timeModel.CurrentTime = _timeModel.SportsTime;
             _timeModel.CurrentRound++;
-        
+
+            _timerStatus = GlobalStrings.Workout;
             _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
+            _timerView.SetStatus(_timerStatus);
+            
+            _progressBarPresenter.SetColor(_timeModel.IsSport);
             _progressBarPresenter.ChangeMaximumDuration(_timeModel.SportsTime);
-        
+
             _audioPlayer.PlaySport();
         }
         else if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == true)
         {
             _timeModel.IsSport = false;
-            _timeModel.TimerStatus = TimerStatus.Rest;
-        
             _timeModel.CurrentTime = _timeModel.TimeBreaks;
-        
+
+            _timerStatus = GlobalStrings.Rest;
+            _timerView.SetStatus(_timerStatus);
+            _progressBarPresenter.SetColor(_timeModel.IsSport);
             _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
+            
             _audioPlayer.PlayTimeBreak();
         }
-        
+
         _timerView.DisplayTime(_timeModel.CurrentTime);
-        _timerView.SetStatus(_timeModel.TimerStatus);
-        _progressBarPresenter.SetColor(_timeModel.TimerStatus);
     }
 
     private void ResetTimer()
     {
         _timeModel.IsRunning = false;
-        _timeModel.TimerStatus = TimerStatus.Rest;
-        
+
         _timeModel.IsSport = false;
         _timeModel.IsStart = true;
 
@@ -206,9 +175,9 @@ public class TimerPresenter
         var sportsTime = PlayerPrefs.GetInt(SettingsType.Sport.ToString());
         var timeBreaks = PlayerPrefs.GetInt(SettingsType.TieBreak.ToString());
 
-        if (_timeModel.NumberRounds != numberRounds
-            || _timeModel.SportsTime != sportsTime
-            || _timeModel.TimeBreaks != timeBreaks)
+        if (_timeModel.NumberRounds != numberRounds ||
+            _timeModel.SportsTime != sportsTime ||
+            _timeModel.TimeBreaks != timeBreaks)
         {
             _timeModel.NumberRounds = numberRounds;
             _timeModel.SportsTime = sportsTime;

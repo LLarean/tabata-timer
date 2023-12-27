@@ -9,7 +9,6 @@ public class TimerModel
 
     public float UpdateFrequency;
 
-    public TimerStatus TimerStatus;
     public bool IsRunning;
     
     public bool IsSport;
@@ -26,7 +25,6 @@ public class TimerModel
 
         UpdateFrequency = updateFrequency;
 
-        TimerStatus = TimerStatus.Preparation;
         IsRunning = false;
         IsSport = false;
         IsStart = true;

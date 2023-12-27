@@ -56,21 +56,7 @@ public class TimerView : View
 
     public void DisplayTime(float timeToDisplay) => _seconds.text = $"{timeToDisplay:00}";
     
-    public void SetStatus(TimerStatus timerStatus)
-    {
-        switch (timerStatus)
-        {
-            case TimerStatus.Preparation:
-                _status.text = GlobalStrings.Preparation;
-                break;
-            case TimerStatus.Workout:
-                _status.text = GlobalStrings.Workout;
-                break;
-            case TimerStatus.Rest:
-                _status.text = GlobalStrings.Rest;
-                break;
-        }
-    }
+    public void SetStatus(string timerStatus) => _status.text = timerStatus;
     
     private void Start()
     {

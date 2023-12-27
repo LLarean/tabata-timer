@@ -16,7 +16,7 @@ public class ProgressBarView : MonoBehaviour
         KillTweeners();
         
         _fill.fillAmount = 1;
-        _colorTweener = _fill.DOColor(GlobalColors.Workout, _colorDuration);
+        // _colorTweener = _fill.DOColor(GlobalColors.Workout, _colorDuration);
         _fillTweener = _fill.DOFillAmount(0, duration).SetEase(Ease.Linear);
     }
     
@@ -24,7 +24,7 @@ public class ProgressBarView : MonoBehaviour
     {
         KillTweeners();
 
-        // _colorTweener = _fill.DOColor(GlobalColors.Pause, _colorDuration);
+        _colorTweener = _fill.DOColor(GlobalColors.Pause, _colorDuration);
     }
 
     public void ResumeAnimation(float duration)
@@ -45,7 +45,13 @@ public class ProgressBarView : MonoBehaviour
     
     public void SetColor(Color color)
     {
-        KillTweeners();
+        // KillTweeners();
+        
+        if (_colorTweener != null)
+        {
+            _colorTweener.Kill();
+        }
+        
         _colorTweener = _fill.DOColor(color, _colorDuration);
     }
     
@@ -59,10 +65,10 @@ public class ProgressBarView : MonoBehaviour
 
     private void KillTweeners()
     {
-        if (_colorTweener != null)
-        {
-            _colorTweener.Kill();
-        }
+        // if (_colorTweener != null)
+        // {
+        //     _colorTweener.Kill();
+        // }
         
         if (_fillTweener != null)
         {
