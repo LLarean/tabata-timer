@@ -1,6 +1,6 @@
 public enum SettingsType
 {
-    Rounds,
-    Sport,
-    TieBreak,
+    NumberRounds,
+    TrainingTime,
+    RestTime,
 }

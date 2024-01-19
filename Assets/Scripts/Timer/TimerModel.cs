@@ -14,8 +14,8 @@ public class TimerModel
     public bool IsSport;
     public bool IsStart;
 
-    public TimerModel(int numberRounds = SettingsValue.DefaultRounds, int sportsTime = SettingsValue.DefaultSport,
-        int timeBreaks = SettingsValue.DefaultTieBreak, float updateFrequency = 1f)
+    public TimerModel(int numberRounds = DefaultSettingsValue.NumberRounds, int sportsTime = DefaultSettingsValue.TrainingTime,
+        int timeBreaks = DefaultSettingsValue.RestTime, float updateFrequency = 1f)
     {
         NumberRounds = numberRounds;
 

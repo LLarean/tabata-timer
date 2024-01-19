@@ -88,8 +88,8 @@ public class TimerPresenter
         _timerView.ResetTimer();
         _timerStatus = GlobalStrings.Preparation;
         _timerView.SetStatus(_timerStatus);
+        
         _progressBarPresenter.PauseAnimation();
-
         _progressBarPresenter.ResetAnimation();
 
         ResetTimer();
@@ -134,6 +134,7 @@ public class TimerPresenter
 
             _timerStatus = GlobalStrings.Rest;
             _timerView.SetStatus(_timerStatus);
+            
             _progressBarPresenter.SetColor(_timeModel.IsSport);
             _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
             
@@ -146,7 +147,6 @@ public class TimerPresenter
     private void ResetTimer()
     {
         _timeModel.IsRunning = false;
-
         _timeModel.IsSport = false;
         _timeModel.IsStart = true;
 
@@ -171,9 +171,9 @@ public class TimerPresenter
 
     private void SetModel()
     {
-        var numberRounds = PlayerPrefs.GetInt(SettingsType.Rounds.ToString());
-        var sportsTime = PlayerPrefs.GetInt(SettingsType.Sport.ToString());
-        var timeBreaks = PlayerPrefs.GetInt(SettingsType.TieBreak.ToString());
+        var numberRounds = PlayerPrefs.GetInt(SettingsType.NumberRounds.ToString());
+        var sportsTime = PlayerPrefs.GetInt(SettingsType.TrainingTime.ToString());
+        var timeBreaks = PlayerPrefs.GetInt(SettingsType.RestTime.ToString());
 
         if (_timeModel.NumberRounds != numberRounds ||
             _timeModel.SportsTime != sportsTime ||

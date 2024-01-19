@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class SettingsItem : MonoBehaviour
 {
+    [SerializeField] private SettingsType _settingsType;
+    [Space]
     [SerializeField] private Button _reduce;
     [SerializeField] private TMP_Text _value;
-    [SerializeField] private Button _add;
-    [Space]
-    [SerializeField] private SettingsType _settingsType;
+    [SerializeField] private Button _increase;
 
     private int _currentValue;
 
@@ -23,23 +23,23 @@ public class SettingsItem : MonoBehaviour
     
     private void Start()
     {
-        _reduce.onClick.AddListener(ReduceClicked);
-        _add.onClick.AddListener(AddClicked);
+        _reduce.onClick.AddListener(ReduceClick);
+        _increase.onClick.AddListener(IncreaseClick);
     }
 
     private void OnDestroy()
     {
         _reduce.onClick.RemoveAllListeners();
-        _add.onClick.RemoveAllListeners();
+        _increase.onClick.RemoveAllListeners();
     }
 
-    private void ReduceClicked()
+    private void ReduceClick()
     {
         _currentValue--;
         OnValueChanged?.Invoke(_settingsType, _currentValue);
     }
 
-    private void AddClicked()
+    private void IncreaseClick()
     {
         _currentValue++;
         OnValueChanged?.Invoke(_settingsType, _currentValue);

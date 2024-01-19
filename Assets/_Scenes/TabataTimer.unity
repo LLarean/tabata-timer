@@ -598,7 +598,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7465025340906995604, guid: e346d53c2b5daa849aac9aa01cf3aaa5, type: 3}
       propertyPath: m_Name
-      value: SettingsItem(TieBreak)
+      value: SettingsItem(RestTime)
       objectReference: {fileID: 0}
     - target: {fileID: 8681513515093679695, guid: e346d53c2b5daa849aac9aa01cf3aaa5, type: 3}
       propertyPath: _settingsType
@@ -1648,7 +1648,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &989979315
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1661,7 +1661,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1776790905}
   - {fileID: 824835098}
   - {fileID: 392633881}
   - {fileID: 1037501952}
@@ -1687,9 +1686,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _back: {fileID: 824835099}
-  _rounds: {fileID: 1037501953}
-  _sport: {fileID: 1462170564}
-  _tieBreak: {fileID: 231594316}
+  _numberRounds: {fileID: 1037501953}
+  _trainingTime: {fileID: 1462170564}
+  _restTime: {fileID: 231594316}
 --- !u!224 &1037501952 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6857819667911367269, guid: e346d53c2b5daa849aac9aa01cf3aaa5, type: 3}
@@ -2034,7 +2033,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7465025340906995604, guid: e346d53c2b5daa849aac9aa01cf3aaa5, type: 3}
       propertyPath: m_Name
-      value: SettingsItem(Sport)
+      value: SettingsItem(TrainingTime)
       objectReference: {fileID: 0}
     - target: {fileID: 8681513515093679695, guid: e346d53c2b5daa849aac9aa01cf3aaa5, type: 3}
       propertyPath: _settingsType
@@ -2270,41 +2269,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1712126623}
   m_CullTransparentMesh: 1
---- !u!1 &1776790904
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1776790905}
-  m_Layer: 5
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1776790905
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1776790904}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 989979315}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540.0001, y: -1464}
-  m_SizeDelta: {x: 72, y: 198}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1822010013
 GameObject:
   m_ObjectHideFlags: 0
@@ -2877,7 +2841,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7465025340906995604, guid: e346d53c2b5daa849aac9aa01cf3aaa5, type: 3}
       propertyPath: m_Name
-      value: SettingsItem(Rounds)
+      value: SettingsItem(NumberRounds)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

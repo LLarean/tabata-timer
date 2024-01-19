@@ -6,9 +6,9 @@ public class SettingsView : View
 {
     [SerializeField] private Button _back;
     [Space]
-    [SerializeField] private SettingsItem _rounds;
-    [SerializeField] private SettingsItem _sport;
-    [SerializeField] private SettingsItem _tieBreak;
+    [SerializeField] private SettingsItem _numberRounds;
+    [SerializeField] private SettingsItem _trainingTime;
+    [SerializeField] private SettingsItem _restTime;
     
     public event Action OnBackClicked;
     public event Action<SettingsType, int> OnSettingsChanged;
@@ -17,14 +17,14 @@ public class SettingsView : View
     {
         switch (settingsType)
         {
-            case SettingsType.Rounds:
-                _rounds.DisplayValue(value);
+            case SettingsType.NumberRounds:
+                _numberRounds.DisplayValue(value);
                 break;
-            case SettingsType.Sport:
-                _sport.DisplayValue(value);
+            case SettingsType.TrainingTime:
+                _trainingTime.DisplayValue(value);
                 break;
-            case SettingsType.TieBreak:
-                _tieBreak.DisplayValue(value);
+            case SettingsType.RestTime:
+                _restTime.DisplayValue(value);
                 break;
         }
     }
@@ -33,18 +33,18 @@ public class SettingsView : View
     {
         _back.onClick.AddListener(BackClicked);
 
-        _rounds.OnValueChanged += ValueChanged;
-        _sport.OnValueChanged += ValueChanged;
-        _tieBreak.OnValueChanged += ValueChanged;
+        _numberRounds.OnValueChanged += ValueChanged;
+        _trainingTime.OnValueChanged += ValueChanged;
+        _restTime.OnValueChanged += ValueChanged;
     }
 
     private void OnDestroy()
     {
         _back.onClick.RemoveAllListeners();
         
-        _rounds.OnValueChanged -= ValueChanged;
-        _sport.OnValueChanged -= ValueChanged;
-        _tieBreak.OnValueChanged -= ValueChanged;
+        _numberRounds.OnValueChanged -= ValueChanged;
+        _trainingTime.OnValueChanged -= ValueChanged;
+        _restTime.OnValueChanged -= ValueChanged;
     }
 
     private void BackClicked() => OnBackClicked?.Invoke();

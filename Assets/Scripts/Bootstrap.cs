@@ -7,7 +7,7 @@ public class Bootstrap : MonoBehaviour
     [SerializeField] private ViewChanger _viewChanger;
     [Space]
     [SerializeField] private TimerView _timerView;
-    [FormerlySerializedAs("progressBar")] [FormerlySerializedAs("_progressBarView")] [SerializeField] private ProgressBarView progressBarView;
+    [SerializeField] private ProgressBarView progressBarView;
     [SerializeField] private SettingsView _settingsView;
 
     private TimerPresenter _timerPresenter;
@@ -66,9 +66,9 @@ public class Bootstrap : MonoBehaviour
     {
         SetDefaultValue();
 
-        var numberRounds = PlayerPrefs.GetInt(SettingsType.Rounds.ToString());
-        var sportsTime = PlayerPrefs.GetInt(SettingsType.Sport.ToString());
-        var timeBreaks = PlayerPrefs.GetInt(SettingsType.TieBreak.ToString());
+        var numberRounds = PlayerPrefs.GetInt(SettingsType.NumberRounds.ToString());
+        var sportsTime = PlayerPrefs.GetInt(SettingsType.TrainingTime.ToString());
+        var timeBreaks = PlayerPrefs.GetInt(SettingsType.RestTime.ToString());
 
         TimerModel timerModel = new TimerModel(numberRounds, sportsTime, timeBreaks);
         return timerModel;
@@ -76,14 +76,14 @@ public class Bootstrap : MonoBehaviour
 
     private void SetDefaultValue()
     {
-        if (PlayerPrefs.HasKey(SettingsType.Rounds.ToString()) == true)
+        if (PlayerPrefs.HasKey(SettingsType.NumberRounds.ToString()) == true)
         {
             return;
         }
 
-        PlayerPrefs.SetInt(SettingsType.Rounds.ToString(), SettingsValue.DefaultRounds);
-        PlayerPrefs.SetInt(SettingsType.Sport.ToString(), SettingsValue.DefaultSport);
-        PlayerPrefs.SetInt(SettingsType.TieBreak.ToString(), SettingsValue.DefaultTieBreak);
+        PlayerPrefs.SetInt(SettingsType.NumberRounds.ToString(), DefaultSettingsValue.NumberRounds);
+        PlayerPrefs.SetInt(SettingsType.TrainingTime.ToString(), DefaultSettingsValue.TrainingTime);
+        PlayerPrefs.SetInt(SettingsType.RestTime.ToString(), DefaultSettingsValue.RestTime);
         PlayerPrefs.Save();
     }
     
