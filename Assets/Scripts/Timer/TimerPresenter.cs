@@ -183,9 +183,9 @@ public class TimerPresenter
             _timeModel.SportsTime = sportsTime;
             _timeModel.TimeBreaks = timeBreaks;
 
-
             _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
             ResetTimer();
+            _progressBarPresenter.ResetAnimation();
         }
     }
 }

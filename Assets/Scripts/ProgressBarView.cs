@@ -13,45 +13,32 @@ public class ProgressBarView : MonoBehaviour
     
     public void StartAnimation(float duration)
     {
-        KillTweeners();
-        
+        KillFillTweener();
         _fill.fillAmount = 1;
-        // _colorTweener = _fill.DOColor(GlobalColors.Workout, _colorDuration);
         _fillTweener = _fill.DOFillAmount(0, duration).SetEase(Ease.Linear);
     }
     
     public void PauseAnimation()
     {
-        KillTweeners();
-
+        KillFillTweener();
         _colorTweener = _fill.DOColor(GlobalColors.Pause, _colorDuration);
     }
 
     public void ResumeAnimation(float duration)
     {
-        KillTweeners();
-        
-        // _colorTweener = _fill.DOColor(GlobalColors.Workout, _colorDuration);
+        KillFillTweener();
         _fillTweener = _fill.DOFillAmount(0, duration).SetEase(Ease.Linear);
     }
     
     public void ResetAnimation()
     {
-        KillTweeners();
-        
+        KillFillTweener();
         _fill.fillAmount = 1;
-        // _colorTweener = _fill.DOColor(GlobalColors.Pause, _colorDuration);
     }
     
     public void SetColor(Color color)
     {
-        // KillTweeners();
-        
-        if (_colorTweener != null)
-        {
-            _colorTweener.Kill();
-        }
-        
+        KillColorTweener();
         _colorTweener = _fill.DOColor(color, _colorDuration);
     }
     
@@ -61,18 +48,27 @@ public class ProgressBarView : MonoBehaviour
         _fill.color = GlobalColors.Pause;
     }
 
-    private void OnDestroy() => KillTweeners();
+    private void OnDestroy() => KillAllTweeners();
 
-    private void KillTweeners()
+    public void KillAllTweeners()
     {
-        // if (_colorTweener != null)
-        // {
-        //     _colorTweener.Kill();
-        // }
-        
+        KillFillTweener();
+        KillColorTweener();
+    }
+    
+    private void KillFillTweener()
+    {
         if (_fillTweener != null)
         {
             _fillTweener.Kill();
+        }
+    }
+    
+    private void KillColorTweener()
+    {
+        if (_colorTweener != null)
+        {
+            _colorTweener.Kill();
         }
     }
 }
