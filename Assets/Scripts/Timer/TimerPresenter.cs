@@ -86,7 +86,7 @@ public class TimerPresenter
 
         _timerView.StopTimer();
         _timerView.ResetTimer();
-        _timerStatus = GlobalStrings.Preparation;
+        _timerStatus = GlobalStrings.Pause;
         _timerView.SetStatus(_timerStatus);
         
         _progressBarPresenter.PauseAnimation();
@@ -155,6 +155,9 @@ public class TimerPresenter
 
         _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
         _timerView.ResetTimer();
+        
+        _timerStatus = GlobalStrings.Pause;
+        _timerView.SetStatus(_timerStatus);
     }
 
     private void PlaySound()
