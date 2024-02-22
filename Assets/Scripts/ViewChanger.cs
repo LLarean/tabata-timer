@@ -16,4 +16,17 @@ public class ViewChanger : MonoBehaviour
         _timerView.Hide();
         _settingsView.Show();
     }
+    
+    private void Update()
+    {
+        if (Application.platform != RuntimePlatform.Android)
+        {
+            return;
+        }
+
+        if (Input.GetKey(KeyCode.Escape) == true && _settingsView.gameObject.activeSelf == true)
+        {
+            ShowTimer();
+        }
+    }
 }

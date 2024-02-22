@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class TimerView : View
 {
+    [Space]
     [SerializeField] private Button _settings;
     [SerializeField] private TMP_Text _seconds;
     [SerializeField] private TMP_Text _roundCounter;

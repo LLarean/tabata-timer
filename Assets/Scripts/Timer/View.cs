@@ -3,11 +3,13 @@ using UnityEngine;
 
 public class View : MonoBehaviour
 {
-    public event Action OnEnabled;
-    
-    public void Show() => gameObject.SetActive(true);
+    [SerializeField] private ViewAnimation _viewAnimation;
 
-    public void Hide() => gameObject.SetActive(false);
+    public event Action OnEnabled;
+
+    public void Show() => _viewAnimation.Show();
+
+    public void Hide() => _viewAnimation.Hide();
     
     private void OnEnable() => OnEnabled?.Invoke();
 }

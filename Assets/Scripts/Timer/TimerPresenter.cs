@@ -72,6 +72,12 @@ public class TimerPresenter
         else
         {
             _timerView.StartTimer();
+
+            if (_timerStatus == GlobalStrings.Pause)
+            {
+                _timerStatus = GlobalStrings.Preparation;
+            }
+            
             _timerView.SetStatus(_timerStatus);
             _progressBarPresenter.SetColor(_timeModel.IsSport);
             _progressBarPresenter.StartAnimation(_timeModel.CurrentTime);

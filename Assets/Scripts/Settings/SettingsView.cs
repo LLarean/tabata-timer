@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class SettingsView : View
 {
+    [Space]
     [SerializeField] private Button _back;
     [Space]
     [SerializeField] private SettingsItem _numberRounds;
