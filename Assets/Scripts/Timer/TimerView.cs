@@ -45,6 +45,7 @@ public class TimerView : View
         }
 
         _startStopLabel.text = GlobalStrings.Start;
+        SetStatus(GlobalStrings.Pause);
     }
 
     public void ResetTimer()

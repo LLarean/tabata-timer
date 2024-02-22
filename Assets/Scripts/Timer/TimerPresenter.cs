@@ -51,11 +51,7 @@ public class TimerPresenter
     private void SettingsClicked()
     {
         _audioPlayer.PlayTap();
-
-        _timerView.StopTimer();
-        _progressBarPresenter.PauseAnimation();
-        _timeModel.IsRunning = false;
-
+        StopTimer();
         _viewChanger.ShowSettings();
     }
 
@@ -65,87 +61,43 @@ public class TimerPresenter
 
         if (_timeModel.IsRunning == true)
         {
-            _timerView.StopTimer();
-            _timerView.SetStatus(GlobalStrings.Pause);
-            _progressBarPresenter.PauseAnimation();
+            StopTimer();
         }
         else
         {
-            _timerView.StartTimer();
-            _timerView.SetStatus(_timerStatus);
-            _progressBarPresenter.SetColor(_timeModel.IsSport);
-            _progressBarPresenter.StartAnimation(_timeModel.CurrentTime);
+            StartTimer();
         }
-
-        _timeModel.IsRunning = !_timeModel.IsRunning;
     }
 
     private void ResetClicked()
     {
         _audioPlayer.PlayTap();
-
-        _timerView.StopTimer();
-        _timerView.ResetTimer();
-        _timerStatus = GlobalStrings.Pause;
-        _timerView.SetStatus(_timerStatus);
-        
-        _progressBarPresenter.PauseAnimation();
-        _progressBarPresenter.ResetAnimation();
-
         ResetTimer();
     }
 
-    private void TimerChanged()
+    private void StartTimer()
     {
-        _timeModel.CurrentTime -= 1;
+        _timeModel.IsRunning = true;
+        
+        _timerView.SetStatus(_timerStatus);
+        _progressBarPresenter.SetColor(_timeModel.IsSport);
+        
+        _timerView.StartTimer();
+        _progressBarPresenter.StartAnimation(_timeModel.CurrentTime);
+    }
 
-        if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == false &&
-            _timeModel.CurrentRound == _timeModel.NumberRounds)
-        {
-            _timerView.StopTimer();
-            _timerView.ResetTimer();
-            
-            _timerStatus = GlobalStrings.Preparation;
-            _timerView.SetStatus(_timerStatus);
-            ResetTimer();
-
-            _progressBarPresenter.PauseAnimation();
-            _audioPlayer.PlayStartFinish();
-        }
-        else if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == false)
-        {
-            _timeModel.IsSport = true;
-            _timeModel.CurrentTime = _timeModel.SportsTime;
-            _timeModel.CurrentRound++;
-
-            _timerStatus = GlobalStrings.Workout;
-            _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
-            _timerView.SetStatus(_timerStatus);
-            
-            _progressBarPresenter.SetColor(_timeModel.IsSport);
-            _progressBarPresenter.ChangeMaximumDuration(_timeModel.SportsTime);
-
-            _audioPlayer.PlaySport();
-        }
-        else if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == true)
-        {
-            _timeModel.IsSport = false;
-            _timeModel.CurrentTime = _timeModel.TimeBreaks;
-
-            _timerStatus = GlobalStrings.Rest;
-            _timerView.SetStatus(_timerStatus);
-            
-            _progressBarPresenter.SetColor(_timeModel.IsSport);
-            _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
-            
-            _audioPlayer.PlayTimeBreak();
-        }
-
-        _timerView.DisplayTime(_timeModel.CurrentTime);
+    private void StopTimer()
+    {
+        _timeModel.IsRunning = false;
+        
+        _timerView.StopTimer();
+        _progressBarPresenter.PauseAnimation();
     }
 
     private void ResetTimer()
     {
+        StopTimer();
+        
         _timeModel.IsRunning = false;
         _timeModel.IsSport = false;
         _timeModel.IsStart = true;
@@ -156,8 +108,62 @@ public class TimerPresenter
         _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
         _timerView.ResetTimer();
         
-        _timerStatus = GlobalStrings.Pause;
+        _timerStatus = GlobalStrings.Preparation;
+        _timerView.SetStatus(GlobalStrings.Pause);
+        
+        _progressBarPresenter.PauseAnimation();
+    }
+
+    private void TimerChanged()
+    {
+        _timeModel.CurrentTime -= 1;
+
+        if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == false &&
+            _timeModel.CurrentRound == _timeModel.NumberRounds)
+        {
+            _audioPlayer.PlayStartFinish();
+            ResetTimer();
+        }
+        else if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == false)
+        {
+            SetWorkout();
+        }
+        else if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == true)
+        {
+            SetTimeBreak();
+        }
+
+        _timerView.DisplayTime(_timeModel.CurrentTime);
+    }
+
+    private void SetWorkout()
+    {
+        _audioPlayer.PlaySport();
+
+        _timeModel.IsSport = true;
+        _timeModel.CurrentTime = _timeModel.SportsTime;
+        _timeModel.CurrentRound++;
+
+        _timerStatus = GlobalStrings.Workout;
+        _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
         _timerView.SetStatus(_timerStatus);
+
+        _progressBarPresenter.SetColor(_timeModel.IsSport);
+        _progressBarPresenter.ChangeMaximumDuration(_timeModel.SportsTime);
+    }
+
+    private void SetTimeBreak()
+    {
+        _audioPlayer.PlayTimeBreak();
+
+        _timeModel.IsSport = false;
+        _timeModel.CurrentTime = _timeModel.TimeBreaks;
+
+        _timerStatus = GlobalStrings.Rest;
+        _timerView.SetStatus(_timerStatus);
+
+        _progressBarPresenter.SetColor(_timeModel.IsSport);
+        _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
     }
 
     private void PlaySound()
