@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class Bootstrap : MonoBehaviour
 {
-    [SerializeField] private AudioPlayer _audioPlayer;
-    [SerializeField] private ViewChanger _viewChanger;
-    [Space]
     [SerializeField] private TimerView _timerView;
     [SerializeField] private ProgressBarView progressBarView;
     [SerializeField] private SettingsView _settingsView;
+    [Space]
+    [SerializeField] private AudioPlayer _audioPlayer;
 
+    private ViewChanger _viewChanger;
+    
     private TimerPresenter _timerPresenter;
     private ProgressBarPresenter _progressBarPresenter;
     private SettingsPresenter _settingsPresenter;
@@ -16,11 +17,25 @@ public class Bootstrap : MonoBehaviour
     private void Start()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        _viewChanger = new ViewChanger(_timerView, _settingsView);
         
         InitializePresenters();
         InstallDependencies();
         
         _viewChanger.ShowTimer();
+    }
+    
+    private void Update()
+    {
+        if (Application.platform != RuntimePlatform.Android)
+        {
+            return;
+        }
+
+        if (Input.GetKey(KeyCode.Escape) == true && _settingsView.gameObject.activeSelf == true)
+        {
+            _viewChanger.ShowTimer();
+        }
     }
 
     private void OnDestroy()

@@ -1,10 +1,14 @@
-using UnityEngine;
-
-public class ViewChanger : MonoBehaviour
+public class ViewChanger
 {
-    [SerializeField] private TimerView _timerView;
-    [SerializeField] private SettingsView _settingsView;
+    private readonly TimerView _timerView;
+    private readonly SettingsView _settingsView;
 
+    public ViewChanger(TimerView timerView, SettingsView settingsView)
+    {
+        _timerView = timerView;
+        _settingsView = settingsView;
+    }
+    
     public void ShowTimer()
     {
         _timerView.Show();
@@ -15,18 +19,5 @@ public class ViewChanger : MonoBehaviour
     {
         _timerView.Hide();
         _settingsView.Show();
-    }
-    
-    private void Update()
-    {
-        if (Application.platform != RuntimePlatform.Android)
-        {
-            return;
-        }
-
-        if (Input.GetKey(KeyCode.Escape) == true && _settingsView.gameObject.activeSelf == true)
-        {
-            ShowTimer();
-        }
     }
 }
