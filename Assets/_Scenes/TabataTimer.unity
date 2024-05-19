@@ -1809,6 +1809,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92234284ae5d24b41bbc6bc9a1108392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _viewHub: {fileID: 0}
   _viewAnimation: {fileID: 989979317}
   _back: {fileID: 824835099}
   _numberRounds: {fileID: 1037501953}
@@ -1987,6 +1988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61527cafd1abcde4892eafa1292b460c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _viewHub: {fileID: 0}
   _viewAnimation: {fileID: 1329293119}
   _settings: {fileID: 806270769}
   _seconds: {fileID: 96342537}
@@ -2205,6 +2207,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a3b0645c15b9541b84351b006d692b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1553353929
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1553353931}
+  - component: {fileID: 1553353930}
+  m_Layer: 0
+  m_Name: ViewHub
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1553353930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553353929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8e70c788293ab9459ce62ea2de5e6ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _timerView: {fileID: 1329293118}
+  _progressBarView: {fileID: 1094689139}
+  _settingsView: {fileID: 989979316}
+--- !u!4 &1553353931
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553353929}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1682709497
 GameObject:
   m_ObjectHideFlags: 0
@@ -2462,7 +2511,7 @@ GameObject:
   - component: {fileID: 1822010015}
   - component: {fileID: 1822010014}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: RootUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2566,7 +2615,7 @@ GameObject:
   - component: {fileID: 1865337744}
   - component: {fileID: 1865337743}
   m_Layer: 0
-  m_Name: Bootstrap
+  m_Name: EntryPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2584,10 +2633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326e5b929d18fba4cac36d5651e07840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timerView: {fileID: 1329293118}
-  progressBarView: {fileID: 1094689139}
-  _settingsView: {fileID: 989979316}
-  _audioPlayer: {fileID: 106699296}
+  _viewHub: {fileID: 1553353930}
 --- !u!4 &1865337744
 Transform:
   m_ObjectHideFlags: 0
@@ -3071,6 +3117,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 1865337744}
+  - {fileID: 1553353931}
   - {fileID: 106699295}
   - {fileID: 1822010017}
   - {fileID: 2075352996}

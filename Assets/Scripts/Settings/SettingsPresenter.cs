@@ -1,3 +1,4 @@
+using EventBusSystem;
 using UnityEngine;
 
 public class SettingsPresenter
@@ -5,8 +6,7 @@ public class SettingsPresenter
     private readonly SettingsModel _settingsModel;
     private readonly SettingsView _settingsView;
     
-    private ViewChanger _viewChanger;
-    private AudioPlayer _audioPlayer;
+    private ViewHub _viewHub;
 
     public SettingsPresenter(SettingsModel settingsModel, SettingsView settingsView)
     {
@@ -20,12 +20,6 @@ public class SettingsPresenter
         _settingsView.OnSettingsChanged += SettingsChanged;
     }
     
-    public void Unsubscribe()
-    {
-        _settingsView.OnBackClicked -= BackClicked;
-        _settingsView.OnSettingsChanged -= SettingsChanged;
-    }
-    
     public void DisplayValue()
     {
         var numberRounds = PlayerPrefs.GetInt(SettingsType.NumberRounds.ToString(), DefaultSettingsValue.NumberRounds);
@@ -37,19 +31,17 @@ public class SettingsPresenter
         _settingsView.DisplayValue(SettingsType.RestTime, restTime);
     }
 
-    public void SetViewChanger(ViewChanger viewChanger) => _viewChanger = viewChanger;
-    
-    public void SetAudioPlayer(AudioPlayer audioPlayer) => _audioPlayer = audioPlayer;
+    public void SetViewChanger(ViewHub viewHub) => _viewHub = viewHub;
 
     private void BackClicked()
     {
-        _audioPlayer.PlayTap();
-        _viewChanger.ShowTimer();
+        EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTap());
+        _viewHub.ShowTimer();
     }
     
     private void SettingsChanged(SettingsType settingsType, int value)
     {
-        _audioPlayer.PlayTap();
+        EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTap());
 
         value = settingsType switch
         {

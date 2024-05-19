@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class View : MonoBehaviour
 {
+    [SerializeField] private ViewHub _viewHub;
     [SerializeField] private ViewAnimation _viewAnimation;
 
     public event Action OnEnabled;

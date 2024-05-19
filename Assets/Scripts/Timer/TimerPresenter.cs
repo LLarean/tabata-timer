@@ -1,3 +1,4 @@
+using EventBusSystem;
 using UnityEngine;
 
 public class TimerPresenter
@@ -5,9 +6,8 @@ public class TimerPresenter
     private readonly TimerModel _timeModel;
     private readonly TimerView _timerView;
 
-    private AudioPlayer _audioPlayer;
     private ProgressBarPresenter _progressBarPresenter;
-    private ViewChanger _viewChanger;
+    private ViewHub _viewHub;
     private string _timerStatus = GlobalStrings.Preparation;
 
     public TimerPresenter(TimerModel timeModel, TimerView timerView)
@@ -24,9 +24,7 @@ public class TimerPresenter
 
     public void SetProgressBar(ProgressBarPresenter progressBarPresenter) => _progressBarPresenter = progressBarPresenter;
 
-    public void SetAudioPlayer(AudioPlayer audioPlayer) => _audioPlayer = audioPlayer;
-
-    public void SetViewChanger(ViewChanger viewChanger) => _viewChanger = viewChanger;
+    public void SetViewChanger(ViewHub viewHub) => _viewHub = viewHub;
 
     public void Subsribe()
     {
@@ -37,22 +35,13 @@ public class TimerPresenter
         _timerView.OnTimerChanged += TimerChanged;
     }
 
-    public void Unsubscribe()
-    {
-        _timerView.OnEnabled -= ViewEnabled;
-        _timerView.OnSettingsClicked -= SettingsClicked;
-        _timerView.OnStartStopClicked -= StartStopClicked;
-        _timerView.OnResetClicked -= ResetClicked;
-        _timerView.OnTimerChanged -= TimerChanged;
-    }
-
     private void ViewEnabled() => SetModel();
 
     private void SettingsClicked()
     {
-        _audioPlayer.PlayTap();
+        EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTap());
         StopTimer();
-        _viewChanger.ShowSettings();
+        _viewHub.ShowSettings();
     }
 
     private void StartStopClicked()
@@ -71,7 +60,7 @@ public class TimerPresenter
 
     private void ResetClicked()
     {
-        _audioPlayer.PlayTap();
+        EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTap());
         ResetTimer();
     }
 
@@ -121,7 +110,7 @@ public class TimerPresenter
         if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == false &&
             _timeModel.CurrentRound == _timeModel.NumberRounds)
         {
-            _audioPlayer.PlayStartFinish();
+            EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleToggle());
             ResetTimer();
         }
         else if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == false)
@@ -138,7 +127,7 @@ public class TimerPresenter
 
     private void SetWorkout()
     {
-        _audioPlayer.PlaySport();
+        EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleSport());
 
         _timeModel.IsSport = true;
         _timeModel.CurrentTime = _timeModel.SportsTime;
@@ -154,7 +143,7 @@ public class TimerPresenter
 
     private void SetTimeBreak()
     {
-        _audioPlayer.PlayTimeBreak();
+        EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTieBreak());
 
         _timeModel.IsSport = false;
         _timeModel.CurrentTime = _timeModel.TimeBreaks;
@@ -168,13 +157,14 @@ public class TimerPresenter
 
     private void PlaySound()
     {
-        _audioPlayer.PlayTap();
+        EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTap());
 
         if (_timeModel.IsStart == true)
         {
             _timeModel.IsStart = false;
             _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
-            _audioPlayer.PlayStartFinish();
+            
+            EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleToggle());
         }
     }
 
