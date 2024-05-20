@@ -7,7 +7,7 @@ public class TimerPresenter
     private readonly TimerView _timerView;
 
     private ProgressBarPresenter _progressBarPresenter;
-    private string _timerStatus = GlobalStrings.Preparation;
+    private string _workoutStatus = GlobalStrings.Preparation;
 
     public TimerPresenter(TimerModel timeModel, TimerView timerView)
     {
@@ -32,7 +32,7 @@ public class TimerPresenter
 
     public void SetProgressBar(ProgressBarPresenter progressBarPresenter) => _progressBarPresenter = progressBarPresenter;
 
-    private void ViewEnabled() => SetModel();
+    private void ViewEnabled() => UpdateModel();
 
     private void SettingsClicked()
     {
@@ -45,13 +45,13 @@ public class TimerPresenter
     {
         PlaySound();
 
-        if (_timeModel.IsRunning == true)
+        if (_timeModel.TimerStatus != TimerStatus.Counting)
         {
-            StopTimer();
+            StartTimer();
         }
         else
         {
-            StartTimer();
+            StopTimer();
         }
     }
 
@@ -63,18 +63,18 @@ public class TimerPresenter
 
     private void StartTimer()
     {
-        _timeModel.IsRunning = true;
+        _timeModel.TimerStatus = TimerStatus.Counting;
         
-        _timerView.DisplayStatus(_timerStatus);
-        _progressBarPresenter.SetColor(_timeModel.IsSport);
-        
+        _timerView.DisplayStatus(_workoutStatus);
         _timerView.StartTimeCounting();
+        
+        _progressBarPresenter.SetColor(_timeModel.WorkoutStatus);
         _progressBarPresenter.StartAnimation(_timeModel.CurrentTime);
     }
 
     private void StopTimer()
     {
-        _timeModel.IsRunning = false;
+        _timeModel.TimerStatus = TimerStatus.Pause;
         
         _timerView.StopTimeCounting();
         _progressBarPresenter.PauseAnimation();
@@ -84,17 +84,15 @@ public class TimerPresenter
     {
         StopTimer();
         
-        _timeModel.IsRunning = false;
-        _timeModel.IsSport = false;
-        _timeModel.IsStart = true;
-
+        _timeModel.TimerStatus = TimerStatus.Reset;
+        _timeModel.WorkoutStatus = WorkoutStatus.Preparation;
         _timeModel.CurrentRound = 0;
         _timeModel.CurrentTime = _timeModel.TimeBreaks;
 
         _timerView.DisplayRounds(_timeModel.CurrentRound, _timeModel.NumberRounds);
         _timerView.ResetTimeCounting();
         
-        _timerStatus = GlobalStrings.Preparation;
+        _workoutStatus = GlobalStrings.Preparation;
         _timerView.DisplayStatus(GlobalStrings.Pause);
         
         _progressBarPresenter.PauseAnimation();
@@ -102,19 +100,23 @@ public class TimerPresenter
 
     private void TimerUpdated()
     {
-        _timeModel.CurrentTime -= 1;
+        _timeModel.CurrentTime -= (int)_timeModel.UpdateFrequency;
 
-        if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == false &&
+        if (_timeModel.CurrentTime == 0 && _timeModel.WorkoutStatus != WorkoutStatus.Workout &&
             _timeModel.CurrentRound == _timeModel.NumberRounds)
         {
             EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleToggleStatus());
             ResetTimer();
         }
-        else if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == false)
+        else if (_timeModel.CurrentTime == 0 && _timeModel.WorkoutStatus == WorkoutStatus.Preparation)
         {
             SetWorkout();
         }
-        else if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == true)
+        else if (_timeModel.CurrentTime == 0 && _timeModel.WorkoutStatus == WorkoutStatus.Rest)
+        {
+            SetWorkout();
+        }
+        else if (_timeModel.CurrentTime == 0 && _timeModel.WorkoutStatus == WorkoutStatus.Workout)
         {
             SetTimeBreak();
         }
@@ -126,15 +128,16 @@ public class TimerPresenter
     {
         EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleSport());
 
-        _timeModel.IsSport = true;
+        _timeModel.WorkoutStatus = WorkoutStatus.Workout;
+        
         _timeModel.CurrentTime = _timeModel.SportsTime;
         _timeModel.CurrentRound++;
 
-        _timerStatus = GlobalStrings.Workout;
+        _workoutStatus = GlobalStrings.Workout;
         _timerView.DisplayRounds(_timeModel.CurrentRound, _timeModel.NumberRounds);
-        _timerView.DisplayStatus(_timerStatus);
+        _timerView.DisplayStatus(_workoutStatus);
 
-        _progressBarPresenter.SetColor(_timeModel.IsSport);
+        _progressBarPresenter.SetColor(_timeModel.WorkoutStatus);
         _progressBarPresenter.ChangeMaximumDuration(_timeModel.SportsTime);
     }
 
@@ -142,13 +145,13 @@ public class TimerPresenter
     {
         EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTieBreak());
 
-        _timeModel.IsSport = false;
+        _timeModel.WorkoutStatus = WorkoutStatus.Rest;
         _timeModel.CurrentTime = _timeModel.TimeBreaks;
 
-        _timerStatus = GlobalStrings.Rest;
-        _timerView.DisplayStatus(_timerStatus);
+        _workoutStatus = GlobalStrings.Rest;
+        _timerView.DisplayStatus(_workoutStatus);
 
-        _progressBarPresenter.SetColor(_timeModel.IsSport);
+        _progressBarPresenter.SetColor(_timeModel.WorkoutStatus);
         _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
     }
 
@@ -156,16 +159,16 @@ public class TimerPresenter
     {
         EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTap());
 
-        if (_timeModel.IsStart == true)
+        if (_timeModel.WorkoutStatus == WorkoutStatus.Workout)
         {
-            _timeModel.IsStart = false;
+            _timeModel.WorkoutStatus = WorkoutStatus.Rest;
             _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
             
             EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleToggleStatus());
         }
     }
 
-    private void SetModel()
+    private void UpdateModel()
     {
         var numberRounds = PlayerPrefs.GetInt(SettingsType.NumberRounds.ToString(), DefaultSettingsValue.NumberRounds);
         var sportsTime = PlayerPrefs.GetInt(SettingsType.TrainingTime.ToString(), DefaultSettingsValue.TrainingTime);
@@ -182,8 +185,9 @@ public class TimerPresenter
         _timeModel.SportsTime = sportsTime;
         _timeModel.TimeBreaks = timeBreaks;
 
-        _timerView.DisplayRounds(_timeModel.CurrentRound, _timeModel.NumberRounds);
+        _timeModel.TimerStatus = TimerStatus.Pause;
+        _timeModel.WorkoutStatus = WorkoutStatus.Preparation;
+
         ResetTimer();
-        _progressBarPresenter.ResetAnimation();
     }
 }

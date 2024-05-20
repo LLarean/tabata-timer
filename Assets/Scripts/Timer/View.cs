@@ -1,16 +1,29 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 
 public class View : MonoBehaviour
 {
-    [SerializeField] private ViewHub _viewHub;
-    [SerializeField] private ViewAnimation _viewAnimation;
+    [SerializeField] private bool _isRight;
+
+    private float _showDuration = .3f;
+    private float _hideDuration = .1f;
+
+    private float _showedPosition = 0;
+    private float _hidedPosition = 2800;
 
     public event Action OnEnabled;
 
-    public void Show() => _viewAnimation.Show();
+    public void Show()
+    {
+        gameObject.transform.DOLocalMoveX(_showedPosition, _showDuration);
+    }
 
-    public void Hide() => _viewAnimation.Hide();
-    
+    public void Hide()
+    {
+        float hidedPosition = _isRight == true ? _hidedPosition : -_hidedPosition;
+        gameObject.transform.DOLocalMoveX(hidedPosition, _hideDuration);
+    }
+
     private void OnEnable() => OnEnabled?.Invoke();
 }
