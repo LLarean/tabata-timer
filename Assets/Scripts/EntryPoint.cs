@@ -1,3 +1,4 @@
+using EventBusSystem;
 using UnityEngine;
 
 public class EntryPoint : MonoBehaviour
@@ -15,7 +16,7 @@ public class EntryPoint : MonoBehaviour
         InitializePresenters();
         InstallDependencies();
         
-        _viewHub.ShowTimer();
+        EventBus.RaiseEvent<IChangeViewHandler>(handler => handler.HandleShowTimer());
     }
 
     private void InitializePresenters()
@@ -36,7 +37,7 @@ public class EntryPoint : MonoBehaviour
 
     private void InitializeProgressBar()
     {
-        ProgressBarModel progressBarModel = new ProgressBarModel();
+        var progressBarModel = new ProgressBarModel();
 
         _progressBarPresenter = new ProgressBarPresenter(progressBarModel, _viewHub.ProgressBarView);
         _progressBarPresenter.ResetAnimation();
@@ -44,7 +45,7 @@ public class EntryPoint : MonoBehaviour
 
     private void InitializeSettings()
     {
-        SettingsModel settingsModel = new SettingsModel();
+        var settingsModel = new SettingsModel();
         _settingsPresenter = new SettingsPresenter(settingsModel, _viewHub.SettingsView);
         _settingsPresenter.Subscribe();
         _settingsPresenter.DisplayValue();
@@ -56,15 +57,12 @@ public class EntryPoint : MonoBehaviour
         var sportsTime = PlayerPrefs.GetInt(SettingsType.TrainingTime.ToString(), DefaultSettingsValue.TrainingTime);
         var timeBreaks = PlayerPrefs.GetInt(SettingsType.RestTime.ToString(), DefaultSettingsValue.RestTime);
 
-        TimerModel timerModel = new TimerModel(numberRounds, sportsTime, timeBreaks);
+        var timerModel = new TimerModel(numberRounds, sportsTime, timeBreaks);
         return timerModel;
     }
 
     private void InstallDependencies()
     {
-        _timerPresenter.SetViewChanger(_viewHub);
         _timerPresenter.SetProgressBar(_progressBarPresenter);
-        
-        _settingsPresenter.SetViewChanger(_viewHub);
     }
 }

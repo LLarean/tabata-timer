@@ -1,7 +1,7 @@
 using EventBusSystem;
 using UnityEngine;
 
-public class ViewHub : MonoBehaviour
+public class ViewHub : MonoBehaviour, IChangeViewHandler
 {
     [SerializeField] private TimerView _timerView;
     [SerializeField] private ProgressBarView _progressBarView;
@@ -11,29 +11,32 @@ public class ViewHub : MonoBehaviour
     public ProgressBarView ProgressBarView => _progressBarView;
     public SettingsView SettingsView => _settingsView;
 
-    public void ShowTimer()
+    public void HandleShowTimer() => ShowTimer();
+
+    public void HandleShowSettings() => ShowSettings();
+
+    private void Awake() => EventBus.Subscribe(this);
+
+    private void OnDestroy() => EventBus.Unsubscribe(this);
+    
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Escape) == true && _settingsView.gameObject.activeSelf == true)
+        {
+            ShowTimer();
+        }
+    }
+    
+    private void ShowTimer()
     {
         _timerView.Show();
         _settingsView.Hide();
     }
 
-    public void ShowSettings()
+    private void ShowSettings()
     {
         _timerView.Hide();
         _settingsView.Show();
-    }
-    
-    private void Update()
-    {
-        if (Application.platform != RuntimePlatform.Android)
-        {
-            return;
-        }
-
-        if (Input.GetKey(KeyCode.Escape) == true && _settingsView.gameObject.activeSelf == true)
-        {
-            ShowTimer();
-        }
     }
 
     [ContextMenu("SetReferences")]

@@ -5,8 +5,6 @@ public class SettingsPresenter
 {
     private readonly SettingsModel _settingsModel;
     private readonly SettingsView _settingsView;
-    
-    private ViewHub _viewHub;
 
     public SettingsPresenter(SettingsModel settingsModel, SettingsView settingsView)
     {
@@ -31,12 +29,10 @@ public class SettingsPresenter
         _settingsView.DisplayValue(SettingsType.RestTime, restTime);
     }
 
-    public void SetViewChanger(ViewHub viewHub) => _viewHub = viewHub;
-
     private void BackClicked()
     {
         EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTap());
-        _viewHub.ShowTimer();
+        EventBus.RaiseEvent<IChangeViewHandler>(handler => handler.HandleShowTimer());
     }
     
     private void SettingsChanged(SettingsType settingsType, int value)

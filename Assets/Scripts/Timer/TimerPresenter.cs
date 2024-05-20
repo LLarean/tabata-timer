@@ -7,7 +7,6 @@ public class TimerPresenter
     private readonly TimerView _timerView;
 
     private ProgressBarPresenter _progressBarPresenter;
-    private ViewHub _viewHub;
     private string _timerStatus = GlobalStrings.Preparation;
 
     public TimerPresenter(TimerModel timeModel, TimerView timerView)
@@ -24,8 +23,6 @@ public class TimerPresenter
 
     public void SetProgressBar(ProgressBarPresenter progressBarPresenter) => _progressBarPresenter = progressBarPresenter;
 
-    public void SetViewChanger(ViewHub viewHub) => _viewHub = viewHub;
-
     public void Subsribe()
     {
         _timerView.OnEnabled += ViewEnabled;
@@ -41,7 +38,7 @@ public class TimerPresenter
     {
         EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTap());
         StopTimer();
-        _viewHub.ShowSettings();
+        EventBus.RaiseEvent<IChangeViewHandler>(handler => handler.HandleShowSettings());
     }
 
     private void StartStopClicked()
