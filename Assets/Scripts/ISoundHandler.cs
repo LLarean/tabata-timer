@@ -3,7 +3,7 @@ using EventBusSystem;
 public interface ISoundHandler : IGlobalSubscriber
 {
     void HandleTap();
-    void HandleToggle();
+    void HandleToggleStatus();
     void HandleSport();
     void HandleTieBreak();
 }

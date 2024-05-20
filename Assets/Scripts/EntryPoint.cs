@@ -14,15 +14,14 @@ public class EntryPoint : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         
         InitializePresenters();
-        InstallDependencies();
         
         EventBus.RaiseEvent<IChangeViewHandler>(handler => handler.HandleShowTimer());
     }
 
     private void InitializePresenters()
     {
-        InitializeTimer();
         InitializeProgressBar();
+        InitializeTimer();
         InitializeSettings();
     }
 
@@ -32,7 +31,8 @@ public class EntryPoint : MonoBehaviour
 
         _timerPresenter = new TimerPresenter(timerModel, _viewHub.TimerView);
         _timerPresenter.SetData();
-        _timerPresenter.Subsribe();
+        _timerPresenter.SubscribeChangesView();
+        _timerPresenter.SetProgressBar(_progressBarPresenter);
     }
 
     private void InitializeProgressBar()
@@ -60,9 +60,15 @@ public class EntryPoint : MonoBehaviour
         var timerModel = new TimerModel(numberRounds, sportsTime, timeBreaks);
         return timerModel;
     }
-
-    private void InstallDependencies()
+    
+    [ContextMenu("SetReferences")]
+    private void SetReferences()
     {
-        _timerPresenter.SetProgressBar(_progressBarPresenter);
+        var viewHubs = FindObjectsOfType<ViewHub>();
+
+        if (viewHubs.Length == 1)
+        {
+            _viewHub = viewHubs[0];
+        }
     }
 }

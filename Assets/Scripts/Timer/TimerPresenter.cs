@@ -17,31 +17,31 @@ public class TimerPresenter
 
     public void SetData()
     {
-        _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
+        _timerView.DisplayRounds(_timeModel.CurrentRound, _timeModel.NumberRounds);
         _timerView.SetUpdateFrequency(_timeModel.UpdateFrequency);
     }
 
-    public void SetProgressBar(ProgressBarPresenter progressBarPresenter) => _progressBarPresenter = progressBarPresenter;
-
-    public void Subsribe()
+    public void SubscribeChangesView()
     {
         _timerView.OnEnabled += ViewEnabled;
         _timerView.OnSettingsClicked += SettingsClicked;
-        _timerView.OnStartStopClicked += StartStopClicked;
+        _timerView.OnStartClicked += StartClicked;
         _timerView.OnResetClicked += ResetClicked;
-        _timerView.OnTimerChanged += TimerChanged;
+        _timerView.OnTimerUpdated += TimerUpdated;
     }
+
+    public void SetProgressBar(ProgressBarPresenter progressBarPresenter) => _progressBarPresenter = progressBarPresenter;
 
     private void ViewEnabled() => SetModel();
 
     private void SettingsClicked()
     {
         EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTap());
-        StopTimer();
         EventBus.RaiseEvent<IChangeViewHandler>(handler => handler.HandleShowSettings());
+        StopTimer();
     }
 
-    private void StartStopClicked()
+    private void StartClicked()
     {
         PlaySound();
 
@@ -65,10 +65,10 @@ public class TimerPresenter
     {
         _timeModel.IsRunning = true;
         
-        _timerView.SetStatus(_timerStatus);
+        _timerView.DisplayStatus(_timerStatus);
         _progressBarPresenter.SetColor(_timeModel.IsSport);
         
-        _timerView.StartTimer();
+        _timerView.StartTimeCounting();
         _progressBarPresenter.StartAnimation(_timeModel.CurrentTime);
     }
 
@@ -76,7 +76,7 @@ public class TimerPresenter
     {
         _timeModel.IsRunning = false;
         
-        _timerView.StopTimer();
+        _timerView.StopTimeCounting();
         _progressBarPresenter.PauseAnimation();
     }
 
@@ -91,23 +91,23 @@ public class TimerPresenter
         _timeModel.CurrentRound = 0;
         _timeModel.CurrentTime = _timeModel.TimeBreaks;
 
-        _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
-        _timerView.ResetTimer();
+        _timerView.DisplayRounds(_timeModel.CurrentRound, _timeModel.NumberRounds);
+        _timerView.ResetTimeCounting();
         
         _timerStatus = GlobalStrings.Preparation;
-        _timerView.SetStatus(GlobalStrings.Pause);
+        _timerView.DisplayStatus(GlobalStrings.Pause);
         
         _progressBarPresenter.PauseAnimation();
     }
 
-    private void TimerChanged()
+    private void TimerUpdated()
     {
         _timeModel.CurrentTime -= 1;
 
         if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == false &&
             _timeModel.CurrentRound == _timeModel.NumberRounds)
         {
-            EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleToggle());
+            EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleToggleStatus());
             ResetTimer();
         }
         else if (_timeModel.CurrentTime == 0 && _timeModel.IsSport == false)
@@ -131,8 +131,8 @@ public class TimerPresenter
         _timeModel.CurrentRound++;
 
         _timerStatus = GlobalStrings.Workout;
-        _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
-        _timerView.SetStatus(_timerStatus);
+        _timerView.DisplayRounds(_timeModel.CurrentRound, _timeModel.NumberRounds);
+        _timerView.DisplayStatus(_timerStatus);
 
         _progressBarPresenter.SetColor(_timeModel.IsSport);
         _progressBarPresenter.ChangeMaximumDuration(_timeModel.SportsTime);
@@ -146,7 +146,7 @@ public class TimerPresenter
         _timeModel.CurrentTime = _timeModel.TimeBreaks;
 
         _timerStatus = GlobalStrings.Rest;
-        _timerView.SetStatus(_timerStatus);
+        _timerView.DisplayStatus(_timerStatus);
 
         _progressBarPresenter.SetColor(_timeModel.IsSport);
         _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
@@ -161,27 +161,29 @@ public class TimerPresenter
             _timeModel.IsStart = false;
             _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
             
-            EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleToggle());
+            EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleToggleStatus());
         }
     }
 
     private void SetModel()
     {
-        var numberRounds = PlayerPrefs.GetInt(SettingsType.NumberRounds.ToString());
-        var sportsTime = PlayerPrefs.GetInt(SettingsType.TrainingTime.ToString());
-        var timeBreaks = PlayerPrefs.GetInt(SettingsType.RestTime.ToString());
+        var numberRounds = PlayerPrefs.GetInt(SettingsType.NumberRounds.ToString(), DefaultSettingsValue.NumberRounds);
+        var sportsTime = PlayerPrefs.GetInt(SettingsType.TrainingTime.ToString(), DefaultSettingsValue.TrainingTime);
+        var timeBreaks = PlayerPrefs.GetInt(SettingsType.RestTime.ToString(), DefaultSettingsValue.RestTime);
 
-        if (_timeModel.NumberRounds != numberRounds ||
-            _timeModel.SportsTime != sportsTime ||
-            _timeModel.TimeBreaks != timeBreaks)
+        if (_timeModel.NumberRounds == numberRounds &&
+            _timeModel.SportsTime == sportsTime &&
+            _timeModel.TimeBreaks == timeBreaks)
         {
-            _timeModel.NumberRounds = numberRounds;
-            _timeModel.SportsTime = sportsTime;
-            _timeModel.TimeBreaks = timeBreaks;
-
-            _timerView.SetRound(_timeModel.CurrentRound, _timeModel.NumberRounds);
-            ResetTimer();
-            _progressBarPresenter.ResetAnimation();
+            return;
         }
+        
+        _timeModel.NumberRounds = numberRounds;
+        _timeModel.SportsTime = sportsTime;
+        _timeModel.TimeBreaks = timeBreaks;
+
+        _timerView.DisplayRounds(_timeModel.CurrentRound, _timeModel.NumberRounds);
+        ResetTimer();
+        _progressBarPresenter.ResetAnimation();
     }
 }

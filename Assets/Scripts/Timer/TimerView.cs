@@ -9,11 +9,11 @@ public class TimerView : View
     [Space]
     [SerializeField] private Button _settings;
     [SerializeField] private TMP_Text _seconds;
-    [SerializeField] private TMP_Text _roundCounter;
+    [SerializeField] private TMP_Text _rounds;
     [SerializeField] private TMP_Text _status;
     [Space]
-    [SerializeField] private Button _startStop;
-    [SerializeField] private TMP_Text _startStopLabel;
+    [SerializeField] private Button _start;
+    [SerializeField] private TMP_Text _startLabel;
     [SerializeField] private Button _reset;
 
     private Coroutine _coroutine = null;
@@ -21,22 +21,22 @@ public class TimerView : View
     private float _updateFrequency = 1f;
 
     public event Action OnSettingsClicked;
-    public event Action OnStartStopClicked;
+    public event Action OnStartClicked;
     public event Action OnResetClicked;
-    public event Action OnTimerChanged;
+    public event Action OnTimerUpdated;
 
     public void SetUpdateFrequency(float updateFrequency) => _updateFrequency = updateFrequency;
 
-    public void SetRound(int currentRounds, int numberRounds) => _roundCounter.text = $"{currentRounds}/{numberRounds}";
+    public void DisplayRounds(int currentRounds, int numberRounds) => _rounds.text = $"{currentRounds}/{numberRounds}";
 
-    public void StartTimer()
+    public void StartTimeCounting()
     {
         _isRunning = true;
-        _coroutine = StartCoroutine(Timer());
-        _startStopLabel.text = GlobalStrings.Stop;
+        _coroutine = StartCoroutine(TimeCounting());
+        _startLabel.text = GlobalStrings.Stop;
     }
 
-    public void StopTimer()
+    public void StopTimeCounting()
     {
         _isRunning = false;
 
@@ -45,54 +45,49 @@ public class TimerView : View
             StopCoroutine(_coroutine);
         }
 
-        _startStopLabel.text = GlobalStrings.Start;
-        SetStatus(GlobalStrings.Pause);
+        _startLabel.text = GlobalStrings.Start;
+        DisplayStatus(GlobalStrings.Pause);
     }
 
-    public void ResetTimer()
+    public void ResetTimeCounting()
     {
-        StopTimer();
-        _startStopLabel.text = GlobalStrings.Start;
+        StopTimeCounting();
+        _startLabel.text = GlobalStrings.Start;
+        // TODO Replace a string?
         _seconds.text = "00";
     }
 
     public void DisplayTime(float timeToDisplay) => _seconds.text = $"{timeToDisplay:00}";
     
-    public void SetStatus(string timerStatus) => _status.text = timerStatus;
+    public void DisplayStatus(string timerStatus) => _status.text = timerStatus;
     
     private void Start()
     {
         _settings.onClick.AddListener(ClickSettings);
-        _startStop.onClick.AddListener(ClickStartStop);
+        _start.onClick.AddListener(ClickStart);
         _reset.onClick.AddListener(ClickReset);
         ResetDisplayedData();
     }
 
-    private void OnDestroy()
-    {
-        _settings.onClick.RemoveAllListeners();
-        _startStop.onClick.RemoveAllListeners();
-        _reset.onClick.RemoveAllListeners();
-    }
-
     private void ClickSettings() => OnSettingsClicked?.Invoke();
 
-    private void ClickStartStop() => OnStartStopClicked?.Invoke();
+    private void ClickStart() => OnStartClicked?.Invoke();
 
     private void ClickReset() => OnResetClicked?.Invoke();
 
     private void ResetDisplayedData()
     {
-        _startStopLabel.text = GlobalStrings.Start;
-        _roundCounter.text = String.Empty;
+        _startLabel.text = GlobalStrings.Start;
+        _rounds.text = String.Empty;
+        // TODO Replace a string?
         _seconds.text = "00";
     }
 
-    private IEnumerator Timer()
+    private IEnumerator TimeCounting()
     {
         while (_isRunning == true)
         {
-            OnTimerChanged?.Invoke();
+            OnTimerUpdated?.Invoke();
             yield return new WaitForSeconds(_updateFrequency);
         }
     }

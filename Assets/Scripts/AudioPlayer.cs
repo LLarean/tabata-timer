@@ -12,7 +12,7 @@ public class AudioPlayer : MonoBehaviour, ISoundHandler
     
     public void HandleTap() => _sounds.PlayOneShot(_tap);
 
-    public void HandleToggle() => _sounds.PlayOneShot(_startFinish);
+    public void HandleToggleStatus() => _sounds.PlayOneShot(_startFinish);
 
     public void HandleSport() => _sounds.PlayOneShot(_sport);
 
