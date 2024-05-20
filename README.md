@@ -7,12 +7,14 @@ With Tabata training, you exercise for 20 seconds then rest for 10 seconds, and 
 ![Training Screen](https://raw.githubusercontent.com/LLarean/tabata-timer/main/Assets/Sprites/Preview/Trainning.png)
 ![Settings Screen](https://raw.githubusercontent.com/LLarean/tabata-timer/main/Assets/Sprites/Preview/Settings.png)
 
+### [Releases](https://github.com/LLarean/tabata-timer/releases)
+
 ### Work plan:
 - [ ] Adding tests
 - [ ] Code refactoring
 - [ ] Optimize the UI
 - [ ] Add English to the app
-- [ ] Build an android build for the releases page
+- [x] Build an android build for the releases page
 - [ ] Perform testing on my device
 - [ ] Should I upload graphic resources? </br><br>
 
