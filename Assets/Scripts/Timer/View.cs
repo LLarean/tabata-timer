@@ -16,13 +16,18 @@ public class View : MonoBehaviour
 
     public void Show()
     {
+        gameObject.SetActive(true);
         gameObject.transform.DOLocalMoveX(_showedPosition, _showDuration);
     }
 
     public void Hide()
     {
         float hidedPosition = _isRight == true ? _hidedPosition : -_hidedPosition;
-        gameObject.transform.DOLocalMoveX(hidedPosition, _hideDuration);
+
+        gameObject.transform.DOLocalMoveX(hidedPosition, _hideDuration).SetEase(Ease.Linear).OnComplete(() =>
+        {
+            gameObject.SetActive(false);
+        });
     }
 
     private void OnEnable() => OnEnabled?.Invoke();

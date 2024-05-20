@@ -43,7 +43,7 @@ public class TimerPresenter
 
     private void StartClicked()
     {
-        PlaySound();
+        EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTap());
 
         if (_timeModel.TimerStatus != TimerStatus.Counting)
         {
@@ -95,17 +95,17 @@ public class TimerPresenter
         _workoutStatus = GlobalStrings.Preparation;
         _timerView.DisplayStatus(GlobalStrings.Pause);
         
-        _progressBarPresenter.PauseAnimation();
+        _progressBarPresenter.ResetAnimation();
     }
 
     private void TimerUpdated()
     {
         _timeModel.CurrentTime -= (int)_timeModel.UpdateFrequency;
 
-        if (_timeModel.CurrentTime == 0 && _timeModel.WorkoutStatus != WorkoutStatus.Workout &&
+        if (_timeModel.CurrentTime == 0 && _timeModel.WorkoutStatus == WorkoutStatus.Workout &&
             _timeModel.CurrentRound == _timeModel.NumberRounds)
         {
-            EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleToggleStatus());
+            EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleFinish());
             ResetTimer();
         }
         else if (_timeModel.CurrentTime == 0 && _timeModel.WorkoutStatus == WorkoutStatus.Preparation)
@@ -153,19 +153,6 @@ public class TimerPresenter
 
         _progressBarPresenter.SetColor(_timeModel.WorkoutStatus);
         _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
-    }
-
-    private void PlaySound()
-    {
-        EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleTap());
-
-        if (_timeModel.WorkoutStatus == WorkoutStatus.Workout)
-        {
-            _timeModel.WorkoutStatus = WorkoutStatus.Rest;
-            _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);
-            
-            EventBus.RaiseEvent<ISoundHandler>(handler => handler.HandleToggleStatus());
-        }
     }
 
     private void UpdateModel()

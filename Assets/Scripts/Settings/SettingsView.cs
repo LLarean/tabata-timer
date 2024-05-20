@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,8 @@ public class SettingsView : View
     [SerializeField] private SettingsItem _numberRounds;
     [SerializeField] private SettingsItem _trainingTime;
     [SerializeField] private SettingsItem _restTime;
+    [Space]
+    [SerializeField] private TMP_Text _version;
     
     public event Action OnBackClicked;
     public event Action<SettingsType, int> OnSettingsChanged;
@@ -37,6 +40,8 @@ public class SettingsView : View
         _numberRounds.OnValueChanged += ValueChanged;
         _trainingTime.OnValueChanged += ValueChanged;
         _restTime.OnValueChanged += ValueChanged;
+
+        _version.text = Application.version;
     }
 
     private void OnDestroy()

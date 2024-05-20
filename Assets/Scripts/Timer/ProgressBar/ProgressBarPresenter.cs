@@ -27,22 +27,6 @@ public class ProgressBarPresenter
 
     public void ResetAnimation() => _progressBarView.ResetAnimation();
 
-    public void SetColor(bool isSport)
-    {
-        Color color = Color.cyan;
-
-        if (isSport == true)
-        { 
-            color = GlobalColors.Workout;
-        }
-        else
-        {
-            color = GlobalColors.Rest;
-        }
-
-        _progressBarView.SetColor(color);
-    }
-
     public void SetColor(WorkoutStatus workoutStatus)
     {
         Color color = workoutStatus == WorkoutStatus.Workout ? GlobalColors.Workout : GlobalColors.Rest;
