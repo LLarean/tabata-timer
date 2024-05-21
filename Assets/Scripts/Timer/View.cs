@@ -10,7 +10,7 @@ public class View : MonoBehaviour
     private float _hideDuration = .1f;
 
     private float _showedPosition = 0;
-    private float _hidedPosition = 2800;
+    private float _hidedPosition = 1400;
 
     public event Action OnEnabled;
 
