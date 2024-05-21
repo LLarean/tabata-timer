@@ -10,12 +10,12 @@ With Tabata training, you exercise for 20 seconds then rest for 10 seconds, and 
 ### [Releases](https://github.com/LLarean/tabata-timer/releases)
 
 ### Work plan:
-- [ ] Adding tests
+- [ ] ~~Adding tests~~ (Reason for cancellation: test and do tween conflict, which takes a lot of time to resolve)
 - [ ] Code refactoring
-- [ ] Optimize the UI
+- [x] Optimize the UI
 - [ ] Add English to the app
 - [x] Build an android build for the releases page
-- [ ] Perform testing on my device
+- [x] Perform testing on my device
 - [ ] Should I upload graphic resources? </br><br>
 
 ### Assets
