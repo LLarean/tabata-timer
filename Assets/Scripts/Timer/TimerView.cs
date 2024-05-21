@@ -19,6 +19,7 @@ public class TimerView : View
     private Coroutine _coroutine = null;
     private bool _isRunning = false;
     private float _updateFrequency = 1f;
+    private float _timeBreaks = 1f;
 
     public event Action OnSettingsClicked;
     public event Action OnStartClicked;
@@ -28,6 +29,12 @@ public class TimerView : View
     public void SetUpdateFrequency(float updateFrequency) => _updateFrequency = updateFrequency;
 
     public void DisplayRounds(int currentRounds, int numberRounds) => _rounds.text = $"{currentRounds}/{numberRounds}";
+    
+    public void SetTimeBreaks(int timeBreaks)
+    {
+        _timeBreaks = timeBreaks;
+        _seconds.text = $"{_timeBreaks:00}";
+    }
 
     public void StartTimeCounting()
     {
@@ -53,8 +60,7 @@ public class TimerView : View
     {
         StopTimeCounting();
         _startLabel.text = GlobalStrings.Start;
-        // TODO Replace a string?
-        _seconds.text = "00";
+        _seconds.text = $"{_timeBreaks:00}";
     }
 
     public void DisplayTime(float timeToDisplay) => _seconds.text = $"{timeToDisplay:00}";
@@ -79,8 +85,7 @@ public class TimerView : View
     {
         _startLabel.text = GlobalStrings.Start;
         _rounds.text = String.Empty;
-        // TODO Replace a string?
-        _seconds.text = "00";
+        _seconds.text = $"{_timeBreaks:00}";
     }
 
     private IEnumerator TimeCounting()
@@ -90,5 +95,5 @@ public class TimerView : View
             OnTimerUpdated?.Invoke();
             yield return new WaitForSeconds(_updateFrequency);
         }
-    }
+    } 
 }

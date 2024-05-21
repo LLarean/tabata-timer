@@ -1,4 +1,5 @@
 using EventBusSystem;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class EntryPoint : MonoBehaviour
@@ -61,7 +62,7 @@ public class EntryPoint : MonoBehaviour
         return timerModel;
     }
     
-    [ContextMenu("SetReferences")]
+    [Button]
     private void SetReferences()
     {
         var viewHubs = FindObjectsOfType<ViewHub>();

@@ -18,6 +18,7 @@ public class TimerPresenter
     public void SetData()
     {
         _timerView.DisplayRounds(_timeModel.CurrentRound, _timeModel.NumberRounds);
+        _timerView.SetTimeBreaks(_timeModel.TimeBreaks);
         _timerView.SetUpdateFrequency(_timeModel.UpdateFrequency);
     }
 
@@ -90,6 +91,7 @@ public class TimerPresenter
         _timeModel.CurrentTime = _timeModel.TimeBreaks;
 
         _timerView.DisplayRounds(_timeModel.CurrentRound, _timeModel.NumberRounds);
+        _timerView.SetTimeBreaks(_timeModel.TimeBreaks);
         _timerView.ResetTimeCounting();
         
         _workoutStatus = GlobalStrings.Preparation;
