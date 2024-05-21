@@ -1,4 +1,5 @@
 using EventBusSystem;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class ViewHub : MonoBehaviour, IChangeViewHandler
@@ -39,7 +40,7 @@ public class ViewHub : MonoBehaviour, IChangeViewHandler
         _settingsView.Show();
     }
 
-    [ContextMenu("SetReferences")]
+    [Button]
     private void SetReferences()
     {
         var timerViews = FindObjectsOfType<TimerView>();
