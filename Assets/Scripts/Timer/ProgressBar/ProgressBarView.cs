@@ -2,7 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ProgressBarView : MonoBehaviour
+public class ProgressBarView : MonoBehaviour, IProgressBarView
 {
     [SerializeField] private Image _fill;
 

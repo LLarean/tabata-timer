@@ -69,12 +69,14 @@ public class TimerView : View
     
     private void Start()
     {
+        SetInitializeStatus();
+        
         _settings.onClick.AddListener(ClickSettings);
         _start.onClick.AddListener(ClickStart);
         _reset.onClick.AddListener(ClickReset);
         ResetDisplayedData();
     }
-
+    
     private void ClickSettings() => OnSettingsClicked?.Invoke();
 
     private void ClickStart() => OnStartClicked?.Invoke();
@@ -95,5 +97,14 @@ public class TimerView : View
             OnTimerUpdated?.Invoke();
             yield return new WaitForSeconds(_updateFrequency);
         }
-    } 
+    }
+    
+    private void SetInitializeStatus()
+    {
+        if (_settings == null || _seconds == null)
+        {
+            
+        }
+    }
+
 }
