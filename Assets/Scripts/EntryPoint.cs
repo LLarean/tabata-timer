@@ -1,3 +1,4 @@
+using Assets.SimpleLocalization.Scripts;
 using EventBusSystem;
 using NaughtyAttributes;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class EntryPoint : MonoBehaviour
     private void Start()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        LocalizationManager.Language = "Russian";
         
         InitializePresenters();
         
