@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Assets.SimpleLocalization.Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,7 +41,7 @@ public class TimerView : View
     {
         _isRunning = true;
         _coroutine = StartCoroutine(TimeCounting());
-        _startLabel.text = GlobalStrings.Stop;
+        _startLabel.text = LocalizationManager.Localize(LocalizationKeys.Stop);
     }
 
     public void StopTimeCounting()
@@ -51,15 +52,15 @@ public class TimerView : View
         {
             StopCoroutine(_coroutine);
         }
-
-        _startLabel.text = GlobalStrings.Start;
-        DisplayStatus(GlobalStrings.Pause);
+        
+        _startLabel.text = LocalizationManager.Localize(LocalizationKeys.Start);
+        DisplayStatus(LocalizationManager.Localize(LocalizationKeys.Pause));
     }
 
     public void ResetTimeCounting()
     {
         StopTimeCounting();
-        _startLabel.text = GlobalStrings.Start;
+        _startLabel.text = LocalizationManager.Localize(LocalizationKeys.Start);
         _seconds.text = $"{_timeBreaks:00}";
     }
 
@@ -75,8 +76,16 @@ public class TimerView : View
         _start.onClick.AddListener(ClickStart);
         _reset.onClick.AddListener(ClickReset);
         ResetDisplayedData();
+
+        LocalizationManager.OnLocalizationChanged += ChangeLocalization;
     }
-    
+
+    private void ChangeLocalization()
+    {
+        _startLabel.text = LocalizationManager.Localize(LocalizationKeys.Start);
+        DisplayStatus(LocalizationManager.Localize(LocalizationKeys.Pause));
+    }
+
     private void ClickSettings() => OnSettingsClicked?.Invoke();
 
     private void ClickStart() => OnStartClicked?.Invoke();
@@ -85,7 +94,7 @@ public class TimerView : View
 
     private void ResetDisplayedData()
     {
-        _startLabel.text = GlobalStrings.Start;
+        _startLabel.text = LocalizationManager.Localize(LocalizationKeys.Start);
         _rounds.text = String.Empty;
         _seconds.text = $"{_timeBreaks:00}";
     }

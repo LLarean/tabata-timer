@@ -7,4 +7,7 @@ public class ExtremeValues
     public const int MaximumRounds = 99;
     public const int MaximumSport = 999;
     public const int MaximumTieBreak = 999;
+    
+    public const int MinimulLanguage = 0;
+    public const int MaximumLanguage = 1;
 }

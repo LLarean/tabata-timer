@@ -13,12 +13,17 @@ public class EntryPoint : MonoBehaviour
 
     private void Start()
     {
-        Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        LocalizationManager.Language = "Russian";
-        
+        SetSystemParameters();
         InitializePresenters();
         
         EventBus.RaiseEvent<IChangeViewHandler>(handler => handler.HandleShowTimer());
+    }
+
+    private static void SetSystemParameters()
+    {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        
+        Localization.SetDefaultLanguage();
     }
 
     private void InitializePresenters()
@@ -63,7 +68,7 @@ public class EntryPoint : MonoBehaviour
         var timerModel = new TimerModel(numberRounds, sportsTime, timeBreaks);
         return timerModel;
     }
-    
+
     [Button]
     private void SetReferences()
     {

@@ -1,3 +1,4 @@
+using Assets.SimpleLocalization.Scripts;
 using EventBusSystem;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ public class TimerPresenter
     private readonly TimerView _timerView;
 
     private ProgressBarPresenter _progressBarPresenter;
-    private string _workoutStatus = GlobalStrings.Preparation;
+    private string _workoutStatusKey = LocalizationKeys.Prepare;
 
     public TimerPresenter(TimerModel timeModel, TimerView timerView)
     {
@@ -65,8 +66,9 @@ public class TimerPresenter
     private void StartTimer()
     {
         _timeModel.TimerStatus = TimerStatus.Counting;
-        
-        _timerView.DisplayStatus(_workoutStatus);
+
+        var status = LocalizationManager.Localize(_workoutStatusKey);
+        _timerView.DisplayStatus(status);
         _timerView.StartTimeCounting();
         
         _progressBarPresenter.SetColor(_timeModel.WorkoutStatus);
@@ -93,9 +95,9 @@ public class TimerPresenter
         _timerView.DisplayRounds(_timeModel.CurrentRound, _timeModel.NumberRounds);
         _timerView.SetTimeBreaks(_timeModel.TimeBreaks);
         _timerView.ResetTimeCounting();
-        
-        _workoutStatus = GlobalStrings.Preparation;
-        _timerView.DisplayStatus(GlobalStrings.Pause);
+
+        _workoutStatusKey = LocalizationKeys.Prepare;
+        _timerView.DisplayStatus(LocalizationManager.Localize(_workoutStatusKey));
         
         _progressBarPresenter.ResetAnimation();
     }
@@ -135,9 +137,9 @@ public class TimerPresenter
         _timeModel.CurrentTime = _timeModel.SportsTime;
         _timeModel.CurrentRound++;
 
-        _workoutStatus = GlobalStrings.Workout;
+        _workoutStatusKey = LocalizationKeys.Work;
         _timerView.DisplayRounds(_timeModel.CurrentRound, _timeModel.NumberRounds);
-        _timerView.DisplayStatus(_workoutStatus);
+        _timerView.DisplayStatus(LocalizationManager.Localize(_workoutStatusKey));
 
         _progressBarPresenter.SetColor(_timeModel.WorkoutStatus);
         _progressBarPresenter.ChangeMaximumDuration(_timeModel.SportsTime);
@@ -150,8 +152,8 @@ public class TimerPresenter
         _timeModel.WorkoutStatus = WorkoutStatus.Rest;
         _timeModel.CurrentTime = _timeModel.TimeBreaks;
 
-        _workoutStatus = GlobalStrings.Rest;
-        _timerView.DisplayStatus(_workoutStatus);
+        _workoutStatusKey = LocalizationKeys.Rest;
+        _timerView.DisplayStatus(LocalizationManager.Localize(_workoutStatusKey));
 
         _progressBarPresenter.SetColor(_timeModel.WorkoutStatus);
         _progressBarPresenter.ChangeMaximumDuration(_timeModel.TimeBreaks);

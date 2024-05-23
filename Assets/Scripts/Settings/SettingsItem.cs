@@ -18,7 +18,19 @@ public class SettingsItem : MonoBehaviour
     public void DisplayValue(int value)
     {
         _currentValue = value;
-        _value.text = value.ToString();
+
+        if (_settingsType == SettingsType.Language && value == 0)
+        {
+            _value.text = GlobalStrings.Ru;
+        }
+        else if (_settingsType == SettingsType.Language && value == 1)
+        {
+            _value.text = GlobalStrings.En;
+        }
+        else
+        {
+            _value.text = value.ToString();
+        }
     }
     
     private void Start()
