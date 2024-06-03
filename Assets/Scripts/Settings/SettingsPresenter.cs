@@ -124,9 +124,9 @@ public class SettingsPresenter
 
         LocalizationManager.Language = value switch
         {
-            0 => "Russian",
-            1 => "English",
-            _ => "English"
+            0 => GlobalStrings.Russian,
+            1 => GlobalStrings.English,
+            _ => GlobalStrings.English,
         };
     }
 }

@@ -1,4 +1,3 @@
-using Assets.SimpleLocalization.Scripts;
 using EventBusSystem;
 using NaughtyAttributes;
 using UnityEngine;

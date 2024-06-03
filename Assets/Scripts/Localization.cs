@@ -37,9 +37,9 @@ public static class Localization
     {
         string language = Application.systemLanguage switch
         {
-            SystemLanguage.English => "English",
-            SystemLanguage.Russian => "Russian",
-            _ => "English"
+            SystemLanguage.English => GlobalStrings.English,
+            SystemLanguage.Russian => GlobalStrings.Russian,
+            _ => GlobalStrings.English
         };
 
         return language;
