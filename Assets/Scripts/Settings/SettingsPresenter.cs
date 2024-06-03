@@ -1,3 +1,4 @@
+using Assets.SimpleLocalization.Scripts;
 using EventBusSystem;
 using UnityEngine;
 
@@ -20,10 +21,12 @@ public class SettingsPresenter
     
     public void DisplayValue()
     {
+        var numberLanguage = PlayerPrefs.GetInt(SettingsType.Language.ToString(), DefaultSettingsValue.NumberLanguage);
         var numberRounds = PlayerPrefs.GetInt(SettingsType.NumberRounds.ToString(), DefaultSettingsValue.NumberRounds);
         var trainingTime = PlayerPrefs.GetInt(SettingsType.TrainingTime.ToString(), DefaultSettingsValue.TrainingTime);
         var restTime = PlayerPrefs.GetInt(SettingsType.RestTime.ToString(), DefaultSettingsValue.RestTime);
         
+        _settingsView.DisplayValue(SettingsType.Language, numberLanguage);
         _settingsView.DisplayValue(SettingsType.NumberRounds, numberRounds);
         _settingsView.DisplayValue(SettingsType.TrainingTime, trainingTime);
         _settingsView.DisplayValue(SettingsType.RestTime, restTime);
@@ -41,6 +44,7 @@ public class SettingsPresenter
 
         value = settingsType switch
         {
+            SettingsType.Language => GetNumberLanguage(value),
             SettingsType.NumberRounds => GetNumberRounds(value),
             SettingsType.TrainingTime => GetTrainingTime(value),
             SettingsType.RestTime => GetRestTime(value),
@@ -50,15 +54,29 @@ public class SettingsPresenter
         PlayerPrefs.SetInt($"{settingsType}", value);
         PlayerPrefs.Save();
 
+        UpdateLanguage(settingsType, value);
         _settingsView.DisplayValue(settingsType, value);
         UpdateSettingsModel();
     }
 
     private void UpdateSettingsModel()
     {
+        _settingsModel.NumberRounds = PlayerPrefs.GetInt(SettingsType.Language.ToString(), DefaultSettingsValue.NumberLanguage);
         _settingsModel.NumberRounds = PlayerPrefs.GetInt(SettingsType.NumberRounds.ToString(), DefaultSettingsValue.NumberRounds);
         _settingsModel.TrainingTime = PlayerPrefs.GetInt(SettingsType.TrainingTime.ToString(), DefaultSettingsValue.TrainingTime);
         _settingsModel.RestTime = PlayerPrefs.GetInt(SettingsType.RestTime.ToString(), DefaultSettingsValue.RestTime);
+    }
+    
+    private static int GetNumberLanguage(int value)
+    {
+        value = value switch
+        {
+            < ExtremeValues.MinimulLanguage => ExtremeValues.MinimulLanguage,
+            > ExtremeValues.MaximumLanguage => ExtremeValues.MaximumLanguage,
+            _ => value
+        };
+
+        return value;
     }
 
     private static int GetNumberRounds(int value)
@@ -95,5 +113,20 @@ public class SettingsPresenter
         };
 
         return value;
+    }
+    
+    private void UpdateLanguage(SettingsType settingsType, int value)
+    {
+        if (settingsType != SettingsType.Language)
+        {
+            return;
+        }
+
+        LocalizationManager.Language = value switch
+        {
+            0 => GlobalStrings.Russian,
+            1 => GlobalStrings.English,
+            _ => GlobalStrings.English,
+        };
     }
 }

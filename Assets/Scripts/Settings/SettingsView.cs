@@ -8,6 +8,7 @@ public class SettingsView : View
     [Space]
     [SerializeField] private Button _back;
     [Space]
+    [SerializeField] private SettingsItem _language;
     [SerializeField] private SettingsItem _numberRounds;
     [SerializeField] private SettingsItem _trainingTime;
     [SerializeField] private SettingsItem _restTime;
@@ -21,6 +22,9 @@ public class SettingsView : View
     {
         switch (settingsType)
         {
+            case SettingsType.Language:
+                _language.DisplayValue(value);
+                break;
             case SettingsType.NumberRounds:
                 _numberRounds.DisplayValue(value);
                 break;
@@ -37,20 +41,12 @@ public class SettingsView : View
     {
         _back.onClick.AddListener(BackClicked);
 
+        _language.OnValueChanged += ValueChanged;
         _numberRounds.OnValueChanged += ValueChanged;
         _trainingTime.OnValueChanged += ValueChanged;
         _restTime.OnValueChanged += ValueChanged;
 
         _version.text = Application.version;
-    }
-
-    private void OnDestroy()
-    {
-        _back.onClick.RemoveAllListeners();
-        
-        _numberRounds.OnValueChanged -= ValueChanged;
-        _trainingTime.OnValueChanged -= ValueChanged;
-        _restTime.OnValueChanged -= ValueChanged;
     }
 
     private void BackClicked() => OnBackClicked?.Invoke();
