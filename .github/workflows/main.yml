@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - '*'
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+jobs:
+  build:
+    name: Build my project
+    runs-on: ubuntu-latest
+    steps:
+
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      # Cache
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library
+
+      # Build
+      - name: Build project
+        uses: game-ci/unity-builder@v2
+        with:
+          unityVersion: 2022.3.29f1
+          targetPlatform: Android 
+
+      # Output 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Build
+          path: build
+
+      - name: Zip build
+        run: |
+          pushd build/Android
+          zip -r ../../Android.zip .
+          popd
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Android.zip
+          name: Release ${{ github.ref }}
