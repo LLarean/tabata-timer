@@ -1,0 +1,34 @@
+yaml
+name: Build Project
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Unity
+      uses: game-ci/setup-unity@v2
+      with:
+        unityVersion: '2020.3.29f1'
+        license: ${{ secrets.UNITY_LICENSE }}
+
+    - name: Build Unity project
+      run: |
+        unity -quit -batchmode -projectPath ./YourProjectPath -executeMethod BuildScript.PerformBuild
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: build
+        path: ./YourProjectPath/Builds/
