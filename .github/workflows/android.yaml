@@ -1,0 +1,42 @@
+name: Android Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Unity 2022.3.29f1
+        uses: actions/setup-unity@v2
+        with:
+          unity-version: 2022.3.29f1
+          download-unity-editor: true
+          cache-unity-editor: true
+          cache-unity-projects: true
+      - name: Install Android SDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+      - name: Install Android NDK
+        run: |
+          wget -nv https://dl.google.com/android/repository/android-ndk-r25-linux-x86_64.zip
+          unzip android-ndk-r25-linux-x86_64.zip
+          export ANDROID_NDK_HOME=$PWD/android-ndk-r25
+          echo "export ANDROID_NDK_HOME=$PWD/android-ndk-r25" >> $GITHUB_ENV
+      - name: Install Android SDK Tools
+        run: |
+          echo "y" | sdkmanager "platform-tools" "build-tools;31.0.0" "platforms;android-31" "cmdline-tools;latest"
+      - name: Build Android project
+        run: |
+          cd .
+          ./Unity -batchmode -quit -executeMethod BuildAndroid
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Android Build
+          path: UnityProject/Builds/Android
