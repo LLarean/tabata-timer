@@ -21,10 +21,11 @@ jobs:
           download-unity-editor: true
           cache-unity-editor: true
           cache-unity-projects: true
-      - name: Install Android SDK
+      - name: Install JDK
         uses: actions/setup-java@v3
         with:
           java-version: '11'
+          distribution: 'adopt'
       - name: Install Android NDK
         run: |
           wget -nv https://dl.google.com/android/repository/android-ndk-r25-linux-x86_64.zip
