@@ -21,11 +21,10 @@ jobs:
           download-unity-editor: true
           cache-unity-editor: true
           cache-unity-projects: true
-
       - name: Build Android project
         run: |
           cd .
-          ./Unity -batchmode -quit -executeMethod BuildAndroid
+          /opt/Unity/Editor/Unity -batchmode -quit -executeMethod BuildAndroid
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
