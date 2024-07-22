@@ -9,19 +9,4 @@ env:
     with:
         targetPlatform: Android
 
-jobs:
-  buildForAllSupportedPlatforms:
-    name: Build for ${{ matrix.targetPlatform }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        targetPlatform:
-          - Android # Build an Android .apk standalone app.
-        projectPath:
-          - "Color Blocks"
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          lfs: true
+
