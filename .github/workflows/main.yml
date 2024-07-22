@@ -2,15 +2,8 @@ name: Build Android
 
 on: workflow_dispatch
 
-env:
-    UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-    UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-    UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-    with:
-        targetPlatform: Android
-
 jobs:
-  buildForAllSupportedPlatforms:
+  buildForAllDesiredPlatforms:
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     strategy:
@@ -18,12 +11,13 @@ jobs:
       matrix:
         targetPlatform:
           - Android # Build an Android .apk standalone app.
+          
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
-          - uses: actions/cache@v4
+       - uses: actions/cache@v4
         with:
           path: Library
           key: Library-${{ matrix.targetPlatform }}
