@@ -76,3 +76,7 @@ crashlytics-build.properties
 
 # Unity3D generated project version file
 ProjectSettings/ProjectVersion.txt
+
+# Ignore temporaries from GameCI
+/[Aa]rtifacts/
+/[Cc]odeCoverage/
