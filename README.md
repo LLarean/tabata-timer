@@ -4,8 +4,9 @@
 ### Releases:
 - [Releases page](https://github.com/LLarean/tabata-timer/releases)
 - [Android(apk)](https://github.com/LLarean/tabata-timer/releases/download/v.1.0.0.24/tabata_timer_1.0.0.24.apk)
+- [Android(RuStore)](https://www.rustore.ru/catalog/app/com.LLarean.TabataTimer)
 - [WebGL](https://llarean.github.io/tabata-timer-webgl/)
-- [RuStore](https://www.rustore.ru/catalog/app/com.LLarean.TabataTimer)
+
 
 What's Tabata This?<br>
 With Tabata training, you exercise for 20 seconds then rest for 10 seconds, and repeat 8 times. This with a short preparation time before starting is a Tabata. It's that simple.<br>
