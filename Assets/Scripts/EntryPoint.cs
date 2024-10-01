@@ -21,8 +21,6 @@ public class EntryPoint : MonoBehaviour
     private static void SetSystemParameters()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        
-        Localization.SetDefaultLanguage();
     }
 
     private void InitializePresenters()

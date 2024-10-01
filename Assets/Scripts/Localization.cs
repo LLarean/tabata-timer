@@ -3,6 +3,22 @@ using UnityEngine;
 
 public static class Localization
 {
+    public static void SetLanguage(string language)
+    {
+        LocalizationManager.Read();
+        var hasKey = PlayerPrefs.HasKey(SettingsType.Language.ToString());
+
+        if (hasKey == true)
+        {
+            LocalizationManager.Language  = GetLanguageFromSaves();
+        }
+        else
+        {
+            LocalizationManager.Language  = language;
+            PlayerPrefs.SetInt(SettingsType.Language.ToString(), GetNumberSystemLanguage());
+        }
+    }
+    
     public static void SetDefaultLanguage()
     {
         LocalizationManager.Read();
