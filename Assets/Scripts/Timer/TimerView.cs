@@ -75,6 +75,7 @@ public class TimerView : View
         _reset.onClick.AddListener(ClickReset);
         ResetDisplayedData();
 
+        ChangeLocalization();
         LocalizationManager.OnLocalizationChanged += ChangeLocalization;
         ChangeLocalization();
     }
