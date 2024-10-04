@@ -1,3 +1,4 @@
+using Assets.SimpleLocalization.Scripts;
 using UnityEngine;
 using YG;
 
@@ -8,7 +9,8 @@ public class LanguageInitializer : MonoBehaviour
         var lang = YandexGame.EnvironmentData.language;
         var language = GetSystemLanguageString(lang);
         
-        Localization.SetLanguage(language);
+        LocalizationManager.Read();
+        LocalizationManager.Language  = language;
     }
     
     private string GetSystemLanguageString(string lang)
@@ -17,7 +19,7 @@ public class LanguageInitializer : MonoBehaviour
         {
             "en" => GlobalStrings.English,
             "ru" => GlobalStrings.Russian,
-            _ => GlobalStrings.English
+            _ => GlobalStrings.Russian
         };
 
         return language;
