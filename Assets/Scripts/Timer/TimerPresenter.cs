@@ -97,7 +97,8 @@ public class TimerPresenter
         _timerView.ResetTimeCounting();
 
         _workoutStatusKey = LocalizationKeys.Prepare;
-        _timerView.DisplayStatus(LocalizationManager.Localize(_workoutStatusKey));
+        var localizeKey = LocalizationKeys.Pause;
+        _timerView.DisplayStatus(LocalizationManager.Localize(localizeKey));
         
         _progressBarPresenter.ResetAnimation();
     }
