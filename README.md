@@ -5,7 +5,9 @@
 - [Releases page](https://github.com/LLarean/tabata-timer/releases)
 - [Android(apk)](https://github.com/LLarean/tabata-timer/releases/download/v.1.0.0.24/tabata_timer_1.0.0.24.apk)
 - [Android(RuStore)](https://www.rustore.ru/catalog/app/com.LLarean.TabataTimer)
-- [WebGL](https://llarean.github.io/tabata-timer-webgl/)
+- [WebGL (GitHub)](https://llarean.github.io/tabata-timer-webgl/)
+- [WebGL (Yandex Games EN)](https://yandex.ru/games/app/370400?lang=en)
+- [WebGL (Yandex Games RU)](https://yandex.ru/games/app/370400?lang=ru)
 
 
 What's Tabata This?<br>
