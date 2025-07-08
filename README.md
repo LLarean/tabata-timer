@@ -8,7 +8,7 @@
 
 ### This is a cross-platform open-source workout interval timer application
 
-### Releases:
+### Releases
 - [Releases page](https://github.com/LLarean/tabata-timer/releases)
 - [Android(apk)](https://github.com/LLarean/tabata-timer/releases/download/v.1.0.0.24/tabata_timer_1.0.0.24.apk)
 - [Android(RuStore)](https://www.rustore.ru/catalog/app/com.LLarean.TabataTimer)
@@ -23,9 +23,13 @@ With Tabata training, you exercise for 20 seconds then rest for 10 seconds, and 
 ![Training Screen](https://raw.githubusercontent.com/LLarean/tabata-timer/main/Assets/Sprites/Preview/Trainning.png)
 ![Settings Screen](https://raw.githubusercontent.com/LLarean/tabata-timer/main/Assets/Sprites/Preview/Settings.png)
 
-### Languages:
+### Languages
 - English
 - Russian
+
+### Technologies
+- Unity3D
+- C#
 
 ### Assets
 Sounds:<br>
