@@ -1,4 +1,11 @@
 # Simple and free Tabata workout timer
+
+[![CodeFactor](https://www.codefactor.io/repository/github/llarean/tabata-timer/badge)](https://www.codefactor.io/repository/github/llarean/tabata-timer)
+[![License](https://img.shields.io/badge/license-GPL3-green.svg)](https://github.com/llarean/tabata-timer/blob/master/LICENSE.md)
+![stability-stable](https://img.shields.io/badge/stability-stable-green.svg)
+[![Releases](https://img.shields.io/github/v/release/llarean/tabata-timer)](https://github.com/llarean/tabata-timer/releases)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+
 ### This is a cross-platform open-source workout interval timer application
 
 ### Releases:
