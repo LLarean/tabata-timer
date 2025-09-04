@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/license-GPL3-green.svg)](https://github.com/llarean/tabata-timer/blob/main/LICENSE)
 ![stability-stable](https://img.shields.io/badge/stability-stable-green.svg)
 [![Releases](https://img.shields.io/github/v/release/llarean/tabata-timer)](https://github.com/llarean/tabata-timer/releases)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/llarean/tabata-timer/graphs/commit-activity)
+[![Support](https://img.shields.io/badge/support-maintenance_mode-orange)](https://github.com/llarean/tabata-timer/graphs/commit-activity)
 
 A cross-platform, open-source workout interval timer application designed specifically for Tabata training. Perfect for high-intensity interval training (HIIT) with customizable timers and audio cues.
 
